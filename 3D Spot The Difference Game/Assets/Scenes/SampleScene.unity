@@ -226,6 +226,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Forest_Road_Scene2
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c462c6998c0bedf449cd7fccc1a2ca96, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c462c6998c0bedf449cd7fccc1a2ca96, type: 3}
 --- !u!1001 &1017999669
@@ -283,6 +287,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ForestRoadScene_Ground
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 98d177aca05685e4780e4878c6c7ea3b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98d177aca05685e4780e4878c6c7ea3b, type: 3}
 --- !u!1001 &1510231829
@@ -339,6 +347,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: e30ed38b6eb7c8941bfdaf26b94e6aef, type: 3}
       propertyPath: m_Name
       value: Forest_Road_Scene1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e30ed38b6eb7c8941bfdaf26b94e6aef, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e30ed38b6eb7c8941bfdaf26b94e6aef, type: 3}
