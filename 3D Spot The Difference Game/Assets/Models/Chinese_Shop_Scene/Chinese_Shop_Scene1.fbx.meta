@@ -9,6 +9,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: GamePalette_MAT
     second: {fileID: 2100000, guid: 0cd6bc79b6e737647912a25077b22c23, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glass_MAT
+    second: {fileID: 2100000, guid: c4aef477bf4f3244b82f8c4872cd7bf8, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
