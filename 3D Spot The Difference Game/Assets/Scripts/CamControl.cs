@@ -16,13 +16,17 @@ namespace Assets.Scripts {
 		private float fov;
 		public float fovMin = 24f;
 		public float fovMax = 45f;
-		public float fovSensLerp = 1f;
 
 		public Vector2 turnSens = new Vector2 (.5f, .5f);
 		private Vector2 turnMomentum;
 		private Vector2 turnMomentumDelta;
 		[SerializeField]
 		private float turnMomentumDecay = .4f;
+
+		public Vector2 maxPan = new Vector2 (5f, 5f);
+		private Vector2 curPan;
+		public float panSens = .1f;
+		private Vector3 camInitPos;
 
 		void Awake () {
 
@@ -38,13 +42,27 @@ namespace Assets.Scripts {
 				pivots[i] = tilts[i].parent;
 			}
 			fov = cams[0].fieldOfView;
+			camInitPos = cams[0].transform.localPosition;
 		}
 
 		private void PanAndZoom_onPinch (float distOld, float distNew, Vector2 pos, Vector2 delta) {
 
-			fov = Mathf.Clamp (fov * Mathf.Lerp (1f, distOld / distNew, fovSensLerp), fovMin, fovMax);
+			float mul = distOld / distNew;
+			fov = Mathf.Clamp (fov * mul, fovMin, fovMax);
+
+			float fovNormalized = 1f - (fov - fovMin) / (fovMax - fovMin);
+			Vector2 maxPanNorm = maxPan * fovNormalized;
+			Vector2 screenCenter = new Vector2 (Screen.width * .5f,
+				pos.y > Screen.height * .5f ? Screen.height * .75f : Screen.height * .25f);
+			Vector2 centerDelta = pos - screenCenter;
+			curPan = curPan * mul - delta * panSens * fovNormalized + centerDelta * panSens * Mathf.Max(0f, 1f / mul - 1f);
+			curPan = new Vector2 (
+				Mathf.Clamp (curPan.x, -maxPanNorm.x, maxPanNorm.x),
+				Mathf.Clamp (curPan.y, -maxPanNorm.y, maxPanNorm.y));
+			Vector3 camPos = camInitPos + (Vector3)curPan;
 			foreach (var c in cams) {
 				c.fieldOfView = fov;
+				c.transform.localPosition = camPos;
 			}
 		}
 

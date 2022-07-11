@@ -81,7 +81,8 @@ public class PanAndZoom : MonoBehaviour {
 			momentum = Vector2.SmoothDamp (momentum, move, ref momentumLerpSpeed, momentumLerpTime);
 
 			if (move != Vector2.zero) {
-				OnSwipe (move);
+				if (Input.GetKey (KeyCode.LeftShift)) OnPinch (Input.mousePosition, 1f, 1f, move);
+				else OnSwipe (move);
 			}
 		}
 
@@ -99,7 +100,7 @@ public class PanAndZoom : MonoBehaviour {
 		}
 
 		if (Input.mouseScrollDelta.y != 0) {
-			OnPinch (Input.mousePosition, 1, Input.mouseScrollDelta.y < 0 ? (1 / mouseScrollSpeed) : mouseScrollSpeed, Vector2.right);
+			OnPinch (Input.mousePosition, 1, Input.mouseScrollDelta.y < 0 ? (1 / mouseScrollSpeed) : mouseScrollSpeed, Vector2.zero);
 		}
 	}
 

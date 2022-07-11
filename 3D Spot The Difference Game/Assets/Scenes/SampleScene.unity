@@ -170,11 +170,10 @@ MonoBehaviour:
   tiltRotMax: 15
   fovMin: 15
   fovMax: 45
-  fovSensLerp: 0.2
-  turnSens: {x: 0.5, y: -0.5}
+  turnSens: {x: 0.25, y: -0.25}
   turnMomentumDecay: 0.4
-  maxPan: {x: 5, y: 5}
-  panSens: 0.1
+  maxPan: {x: 10, y: 10}
+  panSens: 0.025
 --- !u!114 &359680484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,7 +189,7 @@ MonoBehaviour:
   maxDistanceForTap: 40
   maxDurationForTap: 0.4
   useMouse: 1
-  mouseScrollSpeed: 2
+  mouseScrollSpeed: 1.25
   ignoreUI: 0
   momentumLerpTime: 0.025
 --- !u!4 &359680485
