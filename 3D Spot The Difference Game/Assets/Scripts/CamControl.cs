@@ -55,7 +55,7 @@ namespace Assets.Scripts {
 			Vector2 screenCenter = new Vector2 (Screen.width * .5f,
 				pos.y > Screen.height * .5f ? Screen.height * .75f : Screen.height * .25f);
 			Vector2 centerDelta = pos - screenCenter;
-			curPan = curPan * mul - delta * panSens * fovNormalized + centerDelta * panSens * Mathf.Max(0f, 1f / mul - 1f);
+			curPan = curPan * mul - fovNormalized * panSens * delta + Mathf.Max (0f, 1f / mul - 1f) * panSens * centerDelta;
 			curPan = new Vector2 (
 				Mathf.Clamp (curPan.x, -maxPanNorm.x, maxPanNorm.x),
 				Mathf.Clamp (curPan.y, -maxPanNorm.y, maxPanNorm.y));
@@ -85,8 +85,9 @@ namespace Assets.Scripts {
 
 		private void RotateFromScreenDelta (Vector2 delta) {
 
-			pivotRot = (pivotRot + delta.x * turnSens.x) % 360f;
-			tiltRot = Mathf.Clamp (tiltRot + delta.y * turnSens.y, tiltRotMin, tiltRotMax);
+			var sens = turnSens * (fov / fovMax);
+			pivotRot = (pivotRot + delta.x * sens.x) % 360f;
+			tiltRot = Mathf.Clamp (tiltRot + delta.y * sens.y, tiltRotMin, tiltRotMax);
 
 			var rot = Quaternion.Euler (0, pivotRot, 0);
 			foreach (var p in pivots) {
