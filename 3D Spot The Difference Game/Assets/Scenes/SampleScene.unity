@@ -1243,6 +1243,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   markPrefab: {fileID: 7255067318524379751, guid: a22a50e635d62484799378e9ffa4e2e3, type: 3}
   wrongMarkPrefab: {fileID: 999540529}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 200
   foundText: {fileID: 166430461}
   totalText: {fileID: 238504436}
 --- !u!1 &653260035

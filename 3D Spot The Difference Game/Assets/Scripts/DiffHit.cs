@@ -14,7 +14,8 @@ namespace Assets.Scripts {
 
 		private Camera rayCam;
 		private const float maxDist = 1000f;
-		private const int layerMask = 1 << 3;
+		public LayerMask layerMask;
+		private const int diffLayer = 3;
 
 		private Vector3 otherCameraOffset;
 
@@ -45,7 +46,7 @@ namespace Assets.Scripts {
 			screenPos.y += Screen.height * me.rayCam.rect.y;
 			var ray = me.rayCam.ScreenPointToRay (screenPos);
 
-			if (!Physics.Raycast (ray, out var hit, maxDist, layerMask)) {
+			if (!Physics.Raycast (ray, out var hit, maxDist, me.layerMask) || hit.collider.gameObject.layer != diffLayer) {
 				me.CreateWrongMark (initPos);
 				Hearts.SetHearts (-1, true);
 				return;

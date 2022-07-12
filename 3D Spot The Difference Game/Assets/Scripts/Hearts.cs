@@ -19,10 +19,6 @@ namespace Assets.Scripts {
 		void Awake () {
 
 			me = this;
-			if (maxHearts <= 0) {
-				Debug.LogError ("negative or zero maxHearts");
-				return;
-			}
 
 			heartImgs = new Image[maxHearts];
 			heartImgs[0] = GetComponentInChildren<Image> ();
