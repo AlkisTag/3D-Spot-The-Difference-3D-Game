@@ -10,6 +10,7 @@ namespace Assets.Scripts {
 
 		private readonly HashSet<GameObject> foundDiffs = new HashSet<GameObject> ();
 		public GameObject markPrefab;
+		public WrongMark wrongMarkPrefab;
 
 		private Camera rayCam;
 		private const float maxDist = 1000f;
@@ -39,11 +40,13 @@ namespace Assets.Scripts {
 		public static void RegisterTap (Vector2 screenPos) {
 
 			if (!me) return;
+			var initPos = screenPos;
 			screenPos.y %= Screen.height * .5f;
 			screenPos.y += Screen.height * me.rayCam.rect.y;
 			var ray = me.rayCam.ScreenPointToRay (screenPos);
 
 			if (!Physics.Raycast (ray, out var hit, maxDist, layerMask)) {
+				me.CreateWrongMark (initPos);
 				Hearts.SetHearts (-1, true);
 				return;
 			}
@@ -71,6 +74,13 @@ namespace Assets.Scripts {
 				mark.UpdateDirection (rayCam.transform.forward);
 			}
 		}
-	}
 
+		private void CreateWrongMark (Vector2 pos) {
+
+			var markGo = Instantiate (wrongMarkPrefab.gameObject, wrongMarkPrefab.transform.parent);
+			var rectTr = markGo.GetComponent<RectTransform> ();
+			rectTr.anchoredPosition = pos;
+			markGo.SetActive (true);
+		}
+	}
 }

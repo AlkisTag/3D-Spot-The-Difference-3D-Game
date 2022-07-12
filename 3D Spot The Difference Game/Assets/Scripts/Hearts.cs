@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Assets.Scripts {
@@ -12,6 +13,8 @@ namespace Assets.Scripts {
 		private Image[] heartImgs;
 		private const int maxHearts = 3;
 		private int curHearts = maxHearts;
+
+		public GameObject gameOverMenu;
 
 		void Awake () {
 
@@ -37,6 +40,10 @@ namespace Assets.Scripts {
 			hearts = Mathf.Clamp (hearts, 0, maxHearts);
 			me.curHearts = hearts;
 			me.UpdateHearts ();
+
+			if (GameOver () && me.gameOverMenu) {
+				me.gameOverMenu.SetActive (true);
+			}
 		}
 
 		private void UpdateHearts () {
@@ -44,6 +51,12 @@ namespace Assets.Scripts {
 			for (int i = 0; i < maxHearts; i++) {
 				heartImgs[i].sprite = i < curHearts ? heartFull : heartEmpty;
 			}
+		}
+
+		public static bool GameOver () => me && me.curHearts == 0;
+
+		public void RestartGame () {
+			SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
 		}
 	}
 }

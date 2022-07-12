@@ -49,6 +49,8 @@ namespace Assets.Scripts {
 
 		private void PanAndZoom_onPinch (float distOld, float distNew, Vector2 pos, Vector2 delta) {
 
+			if (Hearts.GameOver ()) return;
+
 			float mul = distOld / distNew;
 			fov = Mathf.Clamp (fov * mul, fovMin, fovMax);
 
@@ -69,24 +71,38 @@ namespace Assets.Scripts {
 		}
 
 		private void PanAndZoom_onSwipe (Vector2 delta) {
+
+			if (Hearts.GameOver ()) return;
+
 			RotateFromScreenDelta (delta);
 		}
 
 		private void PanAndZoom_onTap (Vector2 pos) {
+
+			if (Hearts.GameOver ()) return;
+
 			DiffHit.RegisterTap (pos);
 		}
 
 		private void PanAndZoom_onEndTouch (Vector2 pos, Vector2 vel) {
+
+			if (Hearts.GameOver ()) return;
+
 			turnMomentum = vel;
 			turnMomentumDelta = Vector2.zero;
 		}
 
 		private void PanAndZoom_onStartTouch (Vector2 pos) {
+
+			if (Hearts.GameOver ()) return;
+
 			turnMomentum = Vector2.zero;
 			turnMomentumDelta = Vector2.zero;
 		}
 
 		private void RotateFromScreenDelta (Vector2 delta) {
+
+			if (Hearts.GameOver ()) return;
 
 			var sens = turnSens * (fov / fovMax);
 			pivotRot = (pivotRot + delta.x * sens.x) % 360f;
