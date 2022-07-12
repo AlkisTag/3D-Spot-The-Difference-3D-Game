@@ -3,6 +3,7 @@
 namespace Assets.Scripts {
 	public class CamControl : MonoBehaviour {
 
+		private static CamControl me;
 		private PanAndZoom panAndZoom;
 
 		public Camera[] cams = new Camera[2];
@@ -30,6 +31,7 @@ namespace Assets.Scripts {
 
 		void Awake () {
 
+			me = this;
 			panAndZoom = GetComponent<PanAndZoom> ();
 			panAndZoom.onStartTouch += PanAndZoom_onStartTouch;
 			panAndZoom.onEndTouch += PanAndZoom_onEndTouch;
@@ -71,6 +73,7 @@ namespace Assets.Scripts {
 		}
 
 		private void PanAndZoom_onTap (Vector2 pos) {
+			DiffHit.RegisterTap (pos);
 		}
 
 		private void PanAndZoom_onEndTouch (Vector2 pos, Vector2 vel) {
@@ -98,6 +101,9 @@ namespace Assets.Scripts {
 			foreach (var t in tilts) {
 				t.localRotation = rot;
 			}
+
+			var camFwd = cams[0].transform.forward;
+			Billboard.UpdateBillboards (camFwd);
 		}
 
 		void Update () {
@@ -107,6 +113,15 @@ namespace Assets.Scripts {
 				RotateFromScreenDelta (turnMomentum);
 				turnMomentum = Vector2.SmoothDamp (turnMomentum, Vector2.zero, ref turnMomentumDelta, turnMomentumDecay);
 			}
+		}
+
+		public static Camera GetOtherCamera (Camera callerCamera) {
+
+			if (!me) return null;
+			foreach (var c in me.cams) {
+				if (c != callerCamera) return c;
+			}
+			return null;
 		}
 	}
 }
