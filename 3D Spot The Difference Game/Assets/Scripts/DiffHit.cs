@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 namespace Assets.Scripts {
 
 	public class DiffHit : MonoBehaviour {
@@ -15,6 +17,9 @@ namespace Assets.Scripts {
 
 		private Vector3 otherCameraOffset;
 
+		public Text foundText;
+		public Text totalText;
+
 		private void Awake () {
 
 			me = this;
@@ -22,6 +27,8 @@ namespace Assets.Scripts {
 		}
 
 		private void Start () {
+
+			totalText.text = DiffItem.items.Count.ToString ();
 
 			var otherCam = CamControl.GetOtherCamera (rayCam);
 			if (!otherCam) return;
@@ -37,6 +44,7 @@ namespace Assets.Scripts {
 			var ray = me.rayCam.ScreenPointToRay (screenPos);
 
 			if (!Physics.Raycast (ray, out var hit, maxDist, layerMask)) {
+				Hearts.SetHearts (-1, true);
 				return;
 			}
 
@@ -45,6 +53,8 @@ namespace Assets.Scripts {
 				return;
 			}
 			me.foundDiffs.Add (go);
+
+			me.foundText.text = me.foundDiffs.Count.ToString ();
 
 			me.CreateMark (go.transform.position, go.transform.localScale);
 			if (me.otherCameraOffset != Vector3.zero) {
