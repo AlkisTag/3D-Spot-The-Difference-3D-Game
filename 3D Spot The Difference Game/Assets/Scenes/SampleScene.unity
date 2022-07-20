@@ -756,6 +756,7 @@ GameObject:
   - component: {fileID: 359680485}
   - component: {fileID: 359680484}
   - component: {fileID: 359680483}
+  - component: {fileID: 359680486}
   m_Layer: 0
   m_Name: Controller
   m_TagString: Untagged
@@ -819,6 +820,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &359680486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359680482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bf75d731cca29047a63bd47afd40b7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  markPrefab: {fileID: 7255067318524379751, guid: a22a50e635d62484799378e9ffa4e2e3, type: 3}
+  wrongMarkPrefab: {fileID: 999540529}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 200
+  foundText: {fileID: 166430461}
+  totalText: {fileID: 238504436}
+  levelCompletedMenu: {fileID: 2127076794}
 --- !u!1 &396737915
 GameObject:
   m_ObjectHideFlags: 0
@@ -1232,7 +1253,6 @@ GameObject:
   - component: {fileID: 637814354}
   - component: {fileID: 637814352}
   - component: {fileID: 637814353}
-  - component: {fileID: 637814355}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: Untagged
@@ -1330,26 +1350,6 @@ Transform:
   m_Father: {fileID: 1590953927}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
---- !u!114 &637814355
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 637814351}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bf75d731cca29047a63bd47afd40b7d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  markPrefab: {fileID: 7255067318524379751, guid: a22a50e635d62484799378e9ffa4e2e3, type: 3}
-  wrongMarkPrefab: {fileID: 999540529}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 200
-  foundText: {fileID: 166430461}
-  totalText: {fileID: 238504436}
-  levelCompletedMenu: {fileID: 2127076794}
 --- !u!1 &653260035
 GameObject:
   m_ObjectHideFlags: 0
@@ -2464,6 +2464,10 @@ PrefabInstance:
     - target: {fileID: 6134194512377624367, guid: a253ed0ae12d96848b544265a3ce8339, type: 3}
       propertyPath: m_Name
       value: Difference (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6134194512377624367, guid: a253ed0ae12d96848b544265a3ce8339, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7677975082701787025, guid: a253ed0ae12d96848b544265a3ce8339, type: 3}
       propertyPath: m_RootOrder

@@ -147,13 +147,12 @@ namespace Assets.Scripts {
 			}
 		}
 
-		public static Camera GetOtherCamera (Camera callerCamera) {
+		public static Camera[] GetCameras () => me ? me.cams : null;
 
-			if (!me) return null;
-			foreach (var c in me.cams) {
-				if (c != callerCamera) return c;
-			}
-			return null;
+		public static Camera GetCamera (int index) {
+
+			if (!me || me.cams == null || index < 0 || index >= me.cams.Length) return null;
+			return me.cams[index];
 		}
 	}
 }

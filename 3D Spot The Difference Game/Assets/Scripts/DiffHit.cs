@@ -12,64 +12,80 @@ namespace Assets.Scripts {
 		public GameObject markPrefab;
 		public WrongMark wrongMarkPrefab;
 
-		private Camera rayCam;
+		private Camera[] rayCams;
 		private const float maxDist = 1000f;
 		public LayerMask layerMask;
 		private const int diffLayer = 3;
 
-		private Vector3 otherCameraOffset;
+		private Vector3 camerasOffset;
 
 		public Text foundText;
 		public Text totalText;
-		
+
 		public GameObject levelCompletedMenu;
 
 		private void Awake () {
 
 			me = this;
-			rayCam = GetComponent<Camera> ();
 		}
 
 		private void Start () {
 
 			totalText.text = DiffItem.items.Count.ToString ();
 
-			var otherCam = CamControl.GetOtherCamera (rayCam);
-			if (!otherCam) return;
+			rayCams = CamControl.GetCameras ();
+			if (rayCams == null) return;
 
-			otherCameraOffset = otherCam.transform.root.position - rayCam.transform.root.position;
+			camerasOffset = rayCams[1].transform.root.position - rayCams[0].transform.root.position;
 		}
 
 		public static void RegisterTap (Vector2 screenPos) {
 
 			if (!me) return;
+
 			var initPos = screenPos;
-			screenPos.y %= Screen.height * .5f;
-			screenPos.y += Screen.height * me.rayCam.rect.y;
-			var ray = me.rayCam.ScreenPointToRay (screenPos);
+			foreach (var cam in me.rayCams) {
 
-			if (!Physics.Raycast (ray, out var hit, maxDist, me.layerMask) || hit.collider.gameObject.layer != diffLayer) {
-				me.CreateWrongMark (initPos);
-				Hearts.SetHearts (-1, true);
+				// get screen pos, adjusted into this camera's viewport
+				screenPos = initPos;
+				screenPos.y %= Screen.height * .5f;
+				screenPos.y += Screen.height * cam.rect.y;
+				var ray = cam.ScreenPointToRay (screenPos);
+
+				// if nothing hit, skip to next camera (if all checked, will lead to life loss below)
+				if (!Physics.Raycast (ray, out var hit, maxDist, me.layerMask) || hit.collider.gameObject.layer != diffLayer) {
+					continue;
+				}
+
+				// if tapped an already found difference, exit (no life loss)
+				var go = hit.collider.gameObject;
+				if (me.foundDiffs.Contains (go)) {
+					return;
+				}
+
+				// mark found difference
+				me.foundDiffs.Add (go);
+				me.foundText.text = me.foundDiffs.Count.ToString ();
+
+				// show mark on both objects
+				me.CreateMark (go.transform.position, go.transform.localScale);
+				if (me.camerasOffset != Vector3.zero) {
+					var posDelta = cam == me.rayCams[0] ? me.camerasOffset : -me.camerasOffset;
+					me.CreateMark (go.transform.position + posDelta, go.transform.localScale);
+				}
+
+				// check if all differences found
+				if (IsLevelCompleted () && me.levelCompletedMenu) {
+					me.levelCompletedMenu.SetActive (true);
+				}
+
+				// exit (don't lose life)
 				return;
 			}
 
-			var go = hit.collider.gameObject;
-			if (me.foundDiffs.Contains (go)) {
-				return;
-			}
-			me.foundDiffs.Add (go);
-
-			me.foundText.text = me.foundDiffs.Count.ToString ();
-
-			me.CreateMark (go.transform.position, go.transform.localScale);
-			if (me.otherCameraOffset != Vector3.zero) {
-				me.CreateMark (go.transform.position + me.otherCameraOffset, go.transform.localScale);
-			}
-
-			if (IsLevelCompleted () && me.levelCompletedMenu) {
-				me.levelCompletedMenu.SetActive (true);
-			}
+			// if we reached this point, tap was a miss, so lose life
+			me.CreateWrongMark (initPos);
+			Hearts.SetHearts (-1, true);
 		}
 
 		private void CreateMark (Vector3 pos, Vector3 scale) {
@@ -78,7 +94,7 @@ namespace Assets.Scripts {
 			markGo.transform.localScale = scale;
 			var mark = markGo.GetComponent<Billboard> ();
 			if (mark) {
-				mark.UpdateDirection (rayCam.transform.forward);
+				mark.UpdateDirection (me.rayCams[0].transform.forward);
 			}
 		}
 
