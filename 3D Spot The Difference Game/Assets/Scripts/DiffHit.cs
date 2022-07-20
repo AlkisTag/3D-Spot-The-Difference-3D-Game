@@ -21,6 +21,8 @@ namespace Assets.Scripts {
 
 		public Text foundText;
 		public Text totalText;
+		
+		public GameObject levelCompletedMenu;
 
 		private void Awake () {
 
@@ -64,6 +66,10 @@ namespace Assets.Scripts {
 			if (me.otherCameraOffset != Vector3.zero) {
 				me.CreateMark (go.transform.position + me.otherCameraOffset, go.transform.localScale);
 			}
+
+			if (IsLevelCompleted () && me.levelCompletedMenu) {
+				me.levelCompletedMenu.SetActive (true);
+			}
 		}
 
 		private void CreateMark (Vector3 pos, Vector3 scale) {
@@ -83,5 +89,7 @@ namespace Assets.Scripts {
 			rectTr.anchoredPosition = pos;
 			markGo.SetActive (true);
 		}
+
+		public static bool IsLevelCompleted () => me && me.foundDiffs.Count >= DiffItem.items.Count;
 	}
 }

@@ -37,7 +37,7 @@ namespace Assets.Scripts {
 			me.curHearts = hearts;
 			me.UpdateHearts ();
 
-			if (GameOver () && me.gameOverMenu) {
+			if (IsGameOver () && me.gameOverMenu) {
 				me.gameOverMenu.SetActive (true);
 			}
 		}
@@ -49,10 +49,15 @@ namespace Assets.Scripts {
 			}
 		}
 
-		public static bool GameOver () => me && me.curHearts == 0;
+		public static bool IsGameOver (bool orLevelCompleted = false) =>
+			(me && me.curHearts == 0) || (orLevelCompleted && DiffHit.IsLevelCompleted ());
 
-		public void RestartGame () {
+		public void RestartLevel () {
 			SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
+		}
+
+		public void ReturnToMenu () {
+			SceneManager.LoadScene (0);
 		}
 	}
 }

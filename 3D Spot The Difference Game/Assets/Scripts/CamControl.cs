@@ -29,6 +29,9 @@ namespace Assets.Scripts {
 		public float panSens = .1f;
 		private Vector3 camInitPos;
 
+		[SerializeField]
+		private float levelClearUnzoomRate = .9f;
+
 		void Awake () {
 
 			me = this;
@@ -49,7 +52,12 @@ namespace Assets.Scripts {
 
 		private void PanAndZoom_onPinch (float distOld, float distNew, Vector2 pos, Vector2 delta) {
 
-			if (Hearts.GameOver ()) return;
+			PanAndZoom_onPinchChecked (distOld, distNew, pos, delta);
+		}
+
+		private void PanAndZoom_onPinchChecked (float distOld, float distNew, Vector2 pos, Vector2 delta, bool forced = false) {
+
+			if (!forced && Hearts.IsGameOver (true)) return;
 
 			float mul = distOld / distNew;
 			fov = Mathf.Clamp (fov * mul, fovMin, fovMax);
@@ -72,21 +80,21 @@ namespace Assets.Scripts {
 
 		private void PanAndZoom_onSwipe (Vector2 delta) {
 
-			if (Hearts.GameOver ()) return;
+			if (Hearts.IsGameOver (true)) return;
 
 			RotateFromScreenDelta (delta);
 		}
 
 		private void PanAndZoom_onTap (Vector2 pos) {
 
-			if (Hearts.GameOver ()) return;
+			if (Hearts.IsGameOver (true)) return;
 
 			DiffHit.RegisterTap (pos);
 		}
 
 		private void PanAndZoom_onEndTouch (Vector2 pos, Vector2 vel) {
 
-			if (Hearts.GameOver ()) return;
+			if (Hearts.IsGameOver (true)) return;
 
 			turnMomentum = vel;
 			turnMomentumDelta = Vector2.zero;
@@ -94,7 +102,7 @@ namespace Assets.Scripts {
 
 		private void PanAndZoom_onStartTouch (Vector2 pos) {
 
-			if (Hearts.GameOver ()) return;
+			if (Hearts.IsGameOver (true)) return;
 
 			turnMomentum = Vector2.zero;
 			turnMomentumDelta = Vector2.zero;
@@ -102,7 +110,7 @@ namespace Assets.Scripts {
 
 		private void RotateFromScreenDelta (Vector2 delta) {
 
-			if (Hearts.GameOver ()) return;
+			if (Hearts.IsGameOver (true)) return;
 
 			var sens = turnSens * (fov / fovMax);
 			pivotRot = (pivotRot + delta.x * sens.x) % 360f;
@@ -123,6 +131,14 @@ namespace Assets.Scripts {
 		}
 
 		void Update () {
+
+			if (DiffHit.IsLevelCompleted ()) {
+				if (fov < fovMax) {
+					PanAndZoom_onPinchChecked (levelClearUnzoomRate, 1f,
+						new Vector2 (Screen.width * .5f, Screen.height * .25f), Vector2.zero, true);
+				}
+				return;
+			}
 
 			if (turnMomentum != Vector2.zero) {
 
