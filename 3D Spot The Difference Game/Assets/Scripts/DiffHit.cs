@@ -107,7 +107,7 @@ namespace Assets.Scripts {
 			markGo.SetActive (true);
 		}
 
-		public static bool IsLevelCompleted () => me && me.foundDiffs.Count >= DiffItem.items.Count;
+		public static bool IsLevelCompleted () => me && me.foundDiffs.Count >= DiffItem.items.Count && DiffItem.items.Count > 0;
 
 		private static Vector3 GetUniformScaleForMark (Vector3 scale) {
 
