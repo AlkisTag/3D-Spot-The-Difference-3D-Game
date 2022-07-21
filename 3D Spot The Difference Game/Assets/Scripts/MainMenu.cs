@@ -38,12 +38,4 @@ namespace Assets.Scripts {
 			LvInitializer.TransitionToLevel (levelInfo.variant1, levelInfo.variant2);
 		}
 	}
-
-	[System.Serializable]
-	public class LevelInfo {
-
-		public string name;
-		public GameObject variant1;
-		public GameObject variant2;
-	}
 }
