@@ -641,29 +641,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 227633950}
-        m_TargetAssemblyTypeName: Assets.Scripts.Hearts, Assembly-CSharp
+      - m_Target: {fileID: 359680488}
+        m_TargetAssemblyTypeName: Assets.Scripts.DialogHandler, Assembly-CSharp
         m_MethodName: ReturnToMenu
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 642679517}
-        m_TargetAssemblyTypeName: FadeableDialog, Assembly-CSharp
-        m_MethodName: FadeOut
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &294690226
 MonoBehaviour:
@@ -1282,29 +1270,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 227633950}
-        m_TargetAssemblyTypeName: Assets.Scripts.Hearts, Assembly-CSharp
+      - m_Target: {fileID: 359680488}
+        m_TargetAssemblyTypeName: Assets.Scripts.DialogHandler, Assembly-CSharp
         m_MethodName: RestartLevel
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 642679517}
-        m_TargetAssemblyTypeName: FadeableDialog, Assembly-CSharp
-        m_MethodName: FadeOut
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &520485082
 MonoBehaviour:
@@ -1580,10 +1556,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 227633950}
-        m_TargetAssemblyTypeName: Assets.Scripts.Hearts, Assembly-CSharp
+      - m_Target: {fileID: 359680488}
+        m_TargetAssemblyTypeName: Assets.Scripts.DialogHandler, Assembly-CSharp
         m_MethodName: RestartLevel
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4140,10 +4116,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 227633950}
-        m_TargetAssemblyTypeName: Assets.Scripts.Hearts, Assembly-CSharp
+      - m_Target: {fileID: 359680488}
+        m_TargetAssemblyTypeName: Assets.Scripts.DialogHandler, Assembly-CSharp
         m_MethodName: ReturnToMenu
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4658,9 +4634,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 642679517}
-        m_TargetAssemblyTypeName: FadeableDialog, Assembly-CSharp
-        m_MethodName: FadeOut
+      - m_Target: {fileID: 359680488}
+        m_TargetAssemblyTypeName: Assets.Scripts.DialogHandler, Assembly-CSharp
+        m_MethodName: HidePauseMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4812,10 +4788,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 227633950}
-        m_TargetAssemblyTypeName: Assets.Scripts.Hearts, Assembly-CSharp
+      - m_Target: {fileID: 359680488}
+        m_TargetAssemblyTypeName: Assets.Scripts.DialogHandler, Assembly-CSharp
         m_MethodName: ReturnToMenu
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Assets.Scripts {
@@ -51,21 +50,5 @@ namespace Assets.Scripts {
 
 		public static bool IsGameOver (bool orLevelCompleted = false) =>
 			(me && me.curHearts == 0) || (orLevelCompleted && DiffHit.IsLevelCompleted ());
-
-		public void RestartLevel () {
-
-			DialogHandler.Prompt ("Restart Level?", (yes) => {
-				if (yes) SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
-				else DialogHandler.ShowPauseMenu ();
-			});
-		}
-
-		public void ReturnToMenu () {
-
-			DialogHandler.Prompt ("Quit to Menu?", (yes) => {
-				if (yes) SceneManager.LoadScene (MainMenu.sceneIndex);
-				else DialogHandler.ShowPauseMenu ();
-			});
-		}
 	}
 }
