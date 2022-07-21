@@ -10,7 +10,7 @@ namespace Assets.Scripts {
 		public Sprite heartEmpty;
 
 		private Image[] heartImgs;
-		private const int maxHearts = 3;
+		private const int maxHearts = 6;
 		private int curHearts = maxHearts;
 
 		public GameObject gameOverMenu;
