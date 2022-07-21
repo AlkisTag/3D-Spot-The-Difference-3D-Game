@@ -53,11 +53,19 @@ namespace Assets.Scripts {
 			(me && me.curHearts == 0) || (orLevelCompleted && DiffHit.IsLevelCompleted ());
 
 		public void RestartLevel () {
-			SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
+
+			DialogHandler.Prompt ("Restart Level?", (yes) => {
+				if (yes) SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
+				else DialogHandler.ShowPauseMenu ();
+			});
 		}
 
 		public void ReturnToMenu () {
-			SceneManager.LoadScene (MainMenu.sceneIndex);
+
+			DialogHandler.Prompt ("Quit to Menu?", (yes) => {
+				if (yes) SceneManager.LoadScene (MainMenu.sceneIndex);
+				else DialogHandler.ShowPauseMenu ();
+			});
 		}
 	}
 }
