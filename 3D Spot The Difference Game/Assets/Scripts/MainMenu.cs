@@ -35,7 +35,7 @@ namespace Assets.Scripts {
 				return;
 			}
 
-			LvInitializer.TransitionToLevel (levelInfo.variant1, levelInfo.variant2);
+			LvInitializer.TransitionToLevel (levelInfo);
 		}
 	}
 }

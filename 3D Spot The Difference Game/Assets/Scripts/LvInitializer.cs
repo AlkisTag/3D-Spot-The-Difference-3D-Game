@@ -6,54 +6,48 @@ namespace Assets.Scripts {
 
 		private const int levelSceneIndex = 2;
 
-		private static readonly GameObject[] levelPrefabs = new GameObject[2];
+		private static LevelInfo levelToLoad;
 
 		[SerializeField]
 		private GameObject[] levelRoots = new GameObject[2];
 
-		void Awake () {
+		void Start () {
 
 			if (levelRoots == null || levelRoots.Length != 2 || !levelRoots[0] || !levelRoots[1]) {
 				Debug.LogError ("Invalid levelRoots array");
 				return;
 			}
 
-			if (!levelPrefabs[0] || !levelPrefabs[1]) {
+			if (levelToLoad == null) {
 
-				if (levelPrefabs[0]) Debug.Log ("Invalid 2nd level variant");
-				else if (levelPrefabs[1]) Debug.Log ("Invalid 1st level variant");
-				else Debug.Log ("No level variants provided");
+				Debug.Log ("No level to load");
 				return;
 			}
 
+			// create variant objects
 			for (int i = 0; i < levelRoots.Length; i++) {
-				Instantiate (levelPrefabs[i], levelRoots[i].transform.position, levelRoots[i].transform.rotation);
+				Instantiate (i == 0 ? levelToLoad.variant1 : levelToLoad.variant2,
+					levelRoots[i].transform.position, levelRoots[i].transform.rotation);
+			}
+
+			// apply bgColor to fog (disable fog if alpha = 0)
+			if (levelToLoad.bgColor.a == 0f) {
+				RenderSettings.fog = false;
+			}
+			else {
+				RenderSettings.fog = true;
+				RenderSettings.fogColor = levelToLoad.bgColor;
+			}
+
+			// apply bgColor to camera background colors
+			foreach (var cam in CamControl.GetCameras ()) {
+				cam.backgroundColor = levelToLoad.bgColor;
 			}
 		}
 
-		public static bool PrepareLevelToLoad (GameObject firstVariantPrefab, GameObject secondVariantPrefab) {
+		public static void TransitionToLevel (LevelInfo levelInfo) {
 
-			if (!firstVariantPrefab) {
-				Debug.LogError ("Invalid firstVariantPrefab");
-				return false;
-			}
-
-			if (!secondVariantPrefab) {
-				Debug.LogError ("Invalid variantPrefab2");
-				return false;
-			}
-
-			levelPrefabs[0] = firstVariantPrefab;
-			levelPrefabs[1] = secondVariantPrefab;
-			return true;
-		}
-
-		public static void TransitionToLevel (GameObject firstVariantPrefab, GameObject secondVariantPrefab) {
-
-			if (!PrepareLevelToLoad (firstVariantPrefab, secondVariantPrefab)) {
-				return;
-			}
-
+			levelToLoad = levelInfo;
 			SceneManager.LoadScene (levelSceneIndex);
 		}
 	}
