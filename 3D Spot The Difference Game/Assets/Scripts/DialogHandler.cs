@@ -19,7 +19,7 @@ namespace Assets.Scripts {
 
 		void Update () {
 
-			if (Input.GetKeyDown (KeyCode.Escape)) {
+			if (Input.GetKeyDown (KeyCode.Escape) && !Hearts.IsGameOver (true)) {
 				ShowPauseMenu ();
 			}
 		}
