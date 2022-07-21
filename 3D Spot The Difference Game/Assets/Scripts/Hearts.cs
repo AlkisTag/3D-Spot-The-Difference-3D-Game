@@ -57,7 +57,7 @@ namespace Assets.Scripts {
 		}
 
 		public void ReturnToMenu () {
-			SceneManager.LoadScene (0);
+			SceneManager.LoadScene (MainMenu.sceneIndex);
 		}
 	}
 }

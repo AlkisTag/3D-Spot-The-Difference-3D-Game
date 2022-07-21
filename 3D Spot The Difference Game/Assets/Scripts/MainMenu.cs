@@ -5,6 +5,8 @@ using UnityEngine.UI;
 namespace Assets.Scripts {
 	public class MainMenu : MonoBehaviour {
 
+		public const int sceneIndex = 1;
+
 		public LevelInfo[] levelInfos;
 
 		[SerializeField]
