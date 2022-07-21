@@ -1058,6 +1058,7 @@ MonoBehaviour:
   foundText: {fileID: 166430461}
   totalText: {fileID: 238504436}
   levelCompletedMenu: {fileID: 2127076794}
+  referenceCanvas: {fileID: 1194712152}
 --- !u!114 &359680487
 MonoBehaviour:
   m_ObjectHideFlags: 0

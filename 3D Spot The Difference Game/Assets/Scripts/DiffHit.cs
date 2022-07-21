@@ -25,6 +25,8 @@ namespace Assets.Scripts {
 
 		public GameObject levelCompletedMenu;
 
+		public Canvas referenceCanvas;
+
 		private void Awake () {
 
 			me = this;
@@ -111,6 +113,11 @@ namespace Assets.Scripts {
 			var markGo = Instantiate (wrongMarkPrefab.gameObject, wrongMarkPrefab.transform.parent);
 			var rectTr = markGo.GetComponent<RectTransform> ();
 			rectTr.anchoredPosition = pos;
+
+			if (referenceCanvas) {
+				rectTr.localScale *= referenceCanvas.transform.localScale.x;
+			}
+
 			markGo.SetActive (true);
 		}
 
