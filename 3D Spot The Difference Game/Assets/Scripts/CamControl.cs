@@ -6,6 +6,8 @@ namespace Assets.Scripts {
 		private static CamControl me;
 		private PanAndZoom panAndZoom;
 
+		public static readonly int[] camLayers = new int[] { 6, 7 };
+
 		public Camera[] cams = new Camera[2];
 		private readonly Transform[] pivots = new Transform[2];
 		private readonly Transform[] tilts = new Transform[2];

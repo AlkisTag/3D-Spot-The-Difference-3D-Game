@@ -31,12 +31,7 @@ namespace Assets.Scripts {
 
 				// apply camera-specific layer to objects
 				// (to only render them in their respective camera)
-				go.layer = levelRoots[i].layer;
-				foreach (Transform child in go.transform) {
-					// do not change layer if this is in Difference layer (used to mark diff colliders)
-					if (child.gameObject.layer == DiffHit.diffLayer) continue;
-					child.gameObject.layer = levelRoots[i].layer;
-				}
+				DiffHit.MoveToCameraLayer (go, i);
 			}
 
 			// apply bgColor to fog (disable fog if alpha = 0)
