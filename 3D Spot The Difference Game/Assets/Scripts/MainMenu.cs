@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Assets.Scripts {
@@ -36,5 +37,7 @@ namespace Assets.Scripts {
 
 			LvInitializer.TransitionToLevel (levelInfo);
 		}
+
+		public static bool IsInMainMenu () => SceneManager.GetActiveScene ().buildIndex == sceneIndex;
 	}
 }

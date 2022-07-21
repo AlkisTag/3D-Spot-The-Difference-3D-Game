@@ -19,20 +19,26 @@ namespace Assets.Scripts {
 
 		void Update () {
 
-			if (Input.GetKeyDown (KeyCode.Escape) && !Hearts.IsGameOver (true)) {
-				ShowPauseMenu ();
+			if (Input.GetKeyDown (KeyCode.Escape)) {
+
+				if (MainMenu.IsInMainMenu ()) {
+					QuitGame (true);
+				}
+				else if (!Hearts.IsGameOver (true)) {
+					ShowPauseMenu ();
+				}
 			}
 		}
 
 		public static void ShowPauseMenu () {
 
-			if (!me) return;
+			if (!me || !me.pauseMenu) return;
 			me.pauseMenu.FadeIn ();
 		}
 
 		public static void HidePauseMenu () {
 
-			if (!me) return;
+			if (!me || !me.pauseMenu) return;
 			me.pauseMenu.FadeOut ();
 		}
 
@@ -66,7 +72,7 @@ namespace Assets.Scripts {
 				return;
 			}
 
-			bool wasPaused = pauseMenu.IsOpened ();
+			bool wasPaused = pauseMenu && pauseMenu.IsOpened ();
 			HidePauseMenu ();
 			Prompt (text, (yes) => {
 				if (yes) action?.Invoke ();
