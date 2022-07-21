@@ -422,7 +422,7 @@ MonoBehaviour:
     variant1: {fileID: 1589741620407459526, guid: 7fd7b1ed187eb0e44879827ca76fa02f, type: 3}
     variant2: {fileID: 5972275174377234194, guid: 2ad79aa839cd02444a64638a5e5f171e, type: 3}
     bgColor: {r: 0.78431374, g: 0.76862746, b: 0.7058824, a: 1}
-  - name: Chinese Shop
+  - name: Shop
     variant1: {fileID: 5955762499546409103, guid: 1b89761237c97234bb37d18dc7a527cf, type: 3}
     variant2: {fileID: 2343790157954551600, guid: 1e5fa389c821336499c81eceeee5caea, type: 3}
     bgColor: {r: 0.78431374, g: 0.76862746, b: 0.7058824, a: 1}
