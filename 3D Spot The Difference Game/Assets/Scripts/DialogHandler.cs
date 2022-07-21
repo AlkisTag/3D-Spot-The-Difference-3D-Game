@@ -88,5 +88,21 @@ namespace Assets.Scripts {
 				else if (wasPaused) ShowPauseMenu ();
 			});
 		}
+
+
+		public void QuitGame (bool askFirst) {
+
+			if (!askFirst) {
+				Application.Quit ();
+				return;
+			}
+
+			bool wasPaused = pauseMenu.IsOpened ();
+			HidePauseMenu ();
+			Prompt ("Exit game?", (yes) => {
+				if (yes) QuitGame (false);
+				else if (wasPaused) ShowPauseMenu ();
+			});
+		}
 	}
 }
