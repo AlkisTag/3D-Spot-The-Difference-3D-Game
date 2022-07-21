@@ -11,6 +11,7 @@ namespace Assets.Scripts {
 		private readonly HashSet<GameObject> foundDiffs = new HashSet<GameObject> ();
 		public GameObject markPrefab;
 		public WrongMark wrongMarkPrefab;
+		private const float maxMarkScale = 3f;
 
 		private Camera[] rayCams;
 		private const float maxDist = 1000f;
@@ -118,6 +119,7 @@ namespace Assets.Scripts {
 		private static Vector3 GetUniformScaleForMark (Vector3 scale) {
 
 			float max = Mathf.Max (Mathf.Abs (scale.x), Mathf.Abs (scale.y), Mathf.Abs (scale.z));
+			max = Mathf.Min (max, maxMarkScale);
 			return Vector3.one * max;
 		}
 
