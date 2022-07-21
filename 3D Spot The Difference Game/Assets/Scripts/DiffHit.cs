@@ -68,10 +68,11 @@ namespace Assets.Scripts {
 				me.foundText.text = me.foundDiffs.Count.ToString ();
 
 				// show mark on both objects
-				me.CreateMark (go.transform.position, go.transform.localScale);
+				var uniformScale = GetUniformScaleForMark (go.transform.localScale);
+				me.CreateMark (go.transform.position, uniformScale);
 				if (me.camerasOffset != Vector3.zero) {
 					var posDelta = cam == me.rayCams[0] ? me.camerasOffset : -me.camerasOffset;
-					me.CreateMark (go.transform.position + posDelta, go.transform.localScale);
+					me.CreateMark (go.transform.position + posDelta, uniformScale);
 				}
 
 				// check if all differences found
@@ -107,5 +108,11 @@ namespace Assets.Scripts {
 		}
 
 		public static bool IsLevelCompleted () => me && me.foundDiffs.Count >= DiffItem.items.Count;
+
+		private static Vector3 GetUniformScaleForMark (Vector3 scale) {
+
+			float max = Mathf.Max (Mathf.Abs (scale.x), Mathf.Abs (scale.y), Mathf.Abs (scale.z));
+			return Vector3.one * max;
+		}
 	}
 }
