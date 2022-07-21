@@ -13,8 +13,8 @@ namespace Assets.Scripts {
 		private readonly Transform[] tilts = new Transform[2];
 		private float tiltRot = 0;
 		private float pivotRot = 150;
-		public float tiltRotMin = -30;
-		public float tiltRotMax = 15;
+		public float tiltRotMin = -40;
+		public float tiltRotMax = 40;
 
 		private float fov;
 		public float fovMin = 24f;

@@ -997,8 +997,8 @@ MonoBehaviour:
   cams:
   - {fileID: 1687258584}
   - {fileID: 637814352}
-  tiltRotMin: -30
-  tiltRotMax: 15
+  tiltRotMin: -40
+  tiltRotMax: 40
   fovMin: 15
   fovMax: 45
   turnSens: {x: 0.25, y: -0.25}
