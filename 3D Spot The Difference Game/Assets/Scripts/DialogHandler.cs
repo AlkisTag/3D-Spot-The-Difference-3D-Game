@@ -59,50 +59,35 @@ namespace Assets.Scripts {
 			me.promptMenu.FadeIn ();
 		}
 
-		public void RestartLevel (bool askFirst) {
+		public void PromptedAction (string text, System.Action action, bool askFirst) {
 
 			if (!askFirst) {
-				SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
+				action?.Invoke ();
 				return;
 			}
 
 			bool wasPaused = pauseMenu.IsOpened ();
 			HidePauseMenu ();
-			Prompt ("Restart Level?", (yes) => {
-				if (yes) RestartLevel (false);
+			Prompt (text, (yes) => {
+				if (yes) action?.Invoke ();
 				else if (wasPaused) ShowPauseMenu ();
 			});
 		}
 
+		public void RestartLevel (bool askFirst) {
+
+			PromptedAction ("Restart Level?", () => SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex), askFirst);
+		}
+
 		public void ReturnToMenu (bool askFirst) {
 
-			if (!askFirst) {
-				SceneManager.LoadScene (MainMenu.sceneIndex);
-				return;
-			}
-
-			bool wasPaused = pauseMenu.IsOpened ();
-			HidePauseMenu ();
-			Prompt ("Quit to Menu?", (yes) => {
-				if (yes) ReturnToMenu (false);
-				else if (wasPaused) ShowPauseMenu ();
-			});
+			PromptedAction ("Quit to Menu?", () => SceneManager.LoadScene (MainMenu.sceneIndex), askFirst);
 		}
 
 
 		public void QuitGame (bool askFirst) {
 
-			if (!askFirst) {
-				Application.Quit ();
-				return;
-			}
-
-			bool wasPaused = pauseMenu.IsOpened ();
-			HidePauseMenu ();
-			Prompt ("Exit game?", (yes) => {
-				if (yes) QuitGame (false);
-				else if (wasPaused) ShowPauseMenu ();
-			});
+			PromptedAction ("Exit game?", Application.Quit, askFirst);
 		}
 	}
 }
