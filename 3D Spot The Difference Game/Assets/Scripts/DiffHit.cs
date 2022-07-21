@@ -15,7 +15,7 @@ namespace Assets.Scripts {
 		private Camera[] rayCams;
 		private const float maxDist = 1000f;
 		public LayerMask layerMask;
-		private const int diffLayer = 3;
+		public const int diffLayer = 3;
 
 		private Vector3 camerasOffset;
 

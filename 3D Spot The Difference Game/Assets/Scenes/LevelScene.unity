@@ -2947,7 +2947,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1188276544}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: root1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5161,7 +5161,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2127662385}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: root2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

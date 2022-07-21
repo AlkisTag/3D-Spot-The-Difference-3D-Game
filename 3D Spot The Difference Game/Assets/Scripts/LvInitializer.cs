@@ -11,7 +11,7 @@ namespace Assets.Scripts {
 		[SerializeField]
 		private GameObject[] levelRoots = new GameObject[2];
 
-		void Start () {
+		void Awake () {
 
 			if (levelRoots == null || levelRoots.Length != 2 || !levelRoots[0] || !levelRoots[1]) {
 				Debug.LogError ("Invalid levelRoots array");
@@ -26,8 +26,17 @@ namespace Assets.Scripts {
 
 			// create variant objects
 			for (int i = 0; i < levelRoots.Length; i++) {
-				Instantiate (i == 0 ? levelToLoad.variant1 : levelToLoad.variant2,
+				var go = Instantiate (i == 0 ? levelToLoad.variant1 : levelToLoad.variant2,
 					levelRoots[i].transform.position, levelRoots[i].transform.rotation);
+
+				// apply camera-specific layer to objects
+				// (to only render them in their respective camera)
+				go.layer = levelRoots[i].layer;
+				foreach (Transform child in go.transform) {
+					// do not change layer if this is in Difference layer (used to mark diff colliders)
+					if (child.gameObject.layer == DiffHit.diffLayer) continue;
+					child.gameObject.layer = levelRoots[i].layer;
+				}
 			}
 
 			// apply bgColor to fog (disable fog if alpha = 0)
@@ -38,6 +47,9 @@ namespace Assets.Scripts {
 				RenderSettings.fog = true;
 				RenderSettings.fogColor = levelToLoad.bgColor;
 			}
+		}
+
+		private void Start () {
 
 			// apply bgColor to camera background colors
 			foreach (var cam in CamControl.GetCameras ()) {
