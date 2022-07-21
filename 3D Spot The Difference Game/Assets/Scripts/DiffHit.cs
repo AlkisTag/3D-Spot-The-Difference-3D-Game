@@ -82,6 +82,8 @@ namespace Assets.Scripts {
 					MoveToCameraLayer (markGo, cam == me.rayCams[0] ? 1 : 0);
 				}
 
+				MarkFader.ShowMarks ();
+
 				// check if all differences found
 				if (IsLevelCompleted () && me.levelCompletedMenu) {
 					me.levelCompletedMenu.SetActive (true);

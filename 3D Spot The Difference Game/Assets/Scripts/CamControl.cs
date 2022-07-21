@@ -78,6 +78,8 @@ namespace Assets.Scripts {
 				c.fieldOfView = fov;
 				c.transform.localPosition = camPos;
 			}
+
+			MarkFader.ShowMarks ();
 		}
 
 		private void PanAndZoom_onSwipe (Vector2 delta) {
@@ -85,6 +87,7 @@ namespace Assets.Scripts {
 			if (Hearts.IsGameOver (true)) return;
 
 			RotateFromScreenDelta (delta);
+			if (panAndZoom.IsHeldDown ()) MarkFader.ShowMarks ();
 		}
 
 		private void PanAndZoom_onTap (Vector2 pos) {
@@ -135,10 +138,11 @@ namespace Assets.Scripts {
 		void Update () {
 
 			if (DiffHit.IsLevelCompleted ()) {
-				if (fov < fovMax) {
-					PanAndZoom_onPinchChecked (levelClearUnzoomRate, 1f,
-						new Vector2 (Screen.width * .5f, Screen.height * .25f), Vector2.zero, true);
-				}
+
+				PanAndZoom_onPinchChecked (levelClearUnzoomRate, 1f,
+					new Vector2 (Screen.width * .5f, Screen.height * .25f), Vector2.zero, true);
+
+				MarkFader.ShowMarks ();
 				return;
 			}
 

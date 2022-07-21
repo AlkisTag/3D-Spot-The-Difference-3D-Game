@@ -208,4 +208,6 @@ public class PanAndZoom : MonoBehaviour {
 		EventSystem.current.RaycastAll (eventDataCurrentPosition, results);
 		return results.Count > 0;
 	}
+
+	public bool IsHeldDown () => isTouching && Time.time - touch0StartTime > maxDurationForTap;
 }
