@@ -57,3 +57,5 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
+/3D Spot The Difference Game/Assets/BuildReports
+/3D Spot The Difference Game/Assets/BuildReports/Mobile
