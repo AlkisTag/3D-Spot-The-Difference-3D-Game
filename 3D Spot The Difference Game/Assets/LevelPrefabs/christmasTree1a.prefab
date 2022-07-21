@@ -83,6 +83,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: f79cf3b5416569443acaeae154827e29, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: f79cf3b5416569443acaeae154827e29, type: 3}
       propertyPath: m_Name
       value: ChristmasTree_Scene1
@@ -153,6 +157,10 @@ PrefabInstance:
       propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 8a17ea7e476ad94408e785991e1b9419, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8a17ea7e476ad94408e785991e1b9419, type: 3}
       propertyPath: m_Name
       value: ChristmasTree_ground
@@ -163,8 +171,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a17ea7e476ad94408e785991e1b9419, type: 3}
+--- !u!1 &6509611880788046247 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8a17ea7e476ad94408e785991e1b9419, type: 3}
+  m_PrefabInstance: {fileID: 6239632098899365110}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5844855554185947933 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8a17ea7e476ad94408e785991e1b9419, type: 3}
   m_PrefabInstance: {fileID: 6239632098899365110}
   m_PrefabAsset: {fileID: 0}
+--- !u!64 &9123046520478487156
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6509611880788046247}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 570602993948507033, guid: 8a17ea7e476ad94408e785991e1b9419, type: 3}
