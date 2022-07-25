@@ -17,18 +17,18 @@ namespace Assets.Scripts {
 			me = this;
 		}
 
-		void Update () {
+		//void Update () {
 
-			if (Input.GetKeyDown (KeyCode.Escape)) {
+		//	if (Input.GetKeyDown (KeyCode.Escape)) {
 
-				if (MainMenu.IsInMainMenu ()) {
-					QuitGame (true);
-				}
-				else if (!Hearts.IsGameOver (true)) {
-					ShowPauseMenu ();
-				}
-			}
-		}
+		//		if (MainMenu.IsInMainMenu ()) {
+		//			QuitGame (true);
+		//		}
+		//		else if (!Hearts.IsGameOver (true)) {
+		//			ShowPauseMenu ();
+		//		}
+		//	}
+		//}
 
 		public static void ShowPauseMenu () {
 
