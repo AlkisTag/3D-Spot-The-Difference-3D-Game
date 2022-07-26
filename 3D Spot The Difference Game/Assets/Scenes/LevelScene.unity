@@ -1075,6 +1075,7 @@ MonoBehaviour:
   levelRoots:
   - {fileID: 1188276543}
   - {fileID: 2127662384}
+  shadowRendererPrefab: {fileID: 1589741620407459526, guid: fbec58ac6c55c3d418586ca8894a1f8a, type: 3}
 --- !u!114 &359680488
 MonoBehaviour:
   m_ObjectHideFlags: 0
