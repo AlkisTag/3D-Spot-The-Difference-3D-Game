@@ -17,22 +17,28 @@ namespace Assets.Scripts {
 			me = this;
 		}
 
-		void Update () {
+		//void Update () {
 
-			if (Input.GetKeyDown (KeyCode.Escape) && !Hearts.IsGameOver (true)) {
-				ShowPauseMenu ();
-			}
-		}
+		//	if (Input.GetKeyDown (KeyCode.Escape)) {
+
+		//		if (MainMenu.IsInMainMenu ()) {
+		//			QuitGame (true);
+		//		}
+		//		else if (!Hearts.IsGameOver (true)) {
+		//			ShowPauseMenu ();
+		//		}
+		//	}
+		//}
 
 		public static void ShowPauseMenu () {
 
-			if (!me) return;
+			if (!me || !me.pauseMenu) return;
 			me.pauseMenu.FadeIn ();
 		}
 
 		public static void HidePauseMenu () {
 
-			if (!me) return;
+			if (!me || !me.pauseMenu) return;
 			me.pauseMenu.FadeOut ();
 		}
 
@@ -59,34 +65,35 @@ namespace Assets.Scripts {
 			me.promptMenu.FadeIn ();
 		}
 
-		public void RestartLevel (bool askFirst) {
+		public void PromptedAction (string text, System.Action action, bool askFirst) {
 
 			if (!askFirst) {
-				SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
+				action?.Invoke ();
 				return;
 			}
 
-			bool wasPaused = pauseMenu.IsOpened ();
+			bool wasPaused = pauseMenu && pauseMenu.IsOpened ();
 			HidePauseMenu ();
-			Prompt ("Restart Level?", (yes) => {
-				if (yes) RestartLevel (false);
+			Prompt (text, (yes) => {
+				if (yes) action?.Invoke ();
 				else if (wasPaused) ShowPauseMenu ();
 			});
 		}
 
+		public void RestartLevel (bool askFirst) {
+
+			PromptedAction ("Restart Level?", () => SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex), askFirst);
+		}
+
 		public void ReturnToMenu (bool askFirst) {
 
-			if (!askFirst) {
-				SceneManager.LoadScene (MainMenu.sceneIndex);
-				return;
-			}
+			PromptedAction ("Quit to Menu?", () => SceneManager.LoadScene (MainMenu.sceneIndex), askFirst);
+		}
 
-			bool wasPaused = pauseMenu.IsOpened ();
-			HidePauseMenu ();
-			Prompt ("Quit to Menu?", (yes) => {
-				if (yes) ReturnToMenu (false);
-				else if (wasPaused) ShowPauseMenu ();
-			});
+
+		public void QuitGame (bool askFirst) {
+
+			PromptedAction ("Exit game?", Application.Quit, askFirst);
 		}
 	}
 }

@@ -6,13 +6,15 @@ namespace Assets.Scripts {
 		private static CamControl me;
 		private PanAndZoom panAndZoom;
 
+		public static readonly int[] camLayers = new int[] { 6, 7 };
+
 		public Camera[] cams = new Camera[2];
 		private readonly Transform[] pivots = new Transform[2];
 		private readonly Transform[] tilts = new Transform[2];
 		private float tiltRot = 0;
 		private float pivotRot = 150;
-		public float tiltRotMin = -30;
-		public float tiltRotMax = 15;
+		public float tiltRotMin = -40;
+		public float tiltRotMax = 40;
 
 		private float fov;
 		public float fovMin = 24f;
@@ -76,6 +78,8 @@ namespace Assets.Scripts {
 				c.fieldOfView = fov;
 				c.transform.localPosition = camPos;
 			}
+
+			MarkFader.ShowMarks ();
 		}
 
 		private void PanAndZoom_onSwipe (Vector2 delta) {
@@ -83,6 +87,7 @@ namespace Assets.Scripts {
 			if (Hearts.IsGameOver (true)) return;
 
 			RotateFromScreenDelta (delta);
+			if (panAndZoom.IsHeldDown ()) MarkFader.ShowMarks ();
 		}
 
 		private void PanAndZoom_onTap (Vector2 pos) {
@@ -133,10 +138,11 @@ namespace Assets.Scripts {
 		void Update () {
 
 			if (DiffHit.IsLevelCompleted ()) {
-				if (fov < fovMax) {
-					PanAndZoom_onPinchChecked (levelClearUnzoomRate, 1f,
-						new Vector2 (Screen.width * .5f, Screen.height * .25f), Vector2.zero, true);
-				}
+
+				PanAndZoom_onPinchChecked (levelClearUnzoomRate, 1f,
+					new Vector2 (Screen.width * .5f, Screen.height * .25f), Vector2.zero, true);
+
+				MarkFader.ShowMarks ();
 				return;
 			}
 

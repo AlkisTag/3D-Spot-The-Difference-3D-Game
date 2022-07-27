@@ -10,6 +10,10 @@ namespace Assets.Scripts {
 
 		[SerializeField]
 		private GameObject[] levelRoots = new GameObject[2];
+		private readonly GameObject[] levelVariants = new GameObject[2];
+
+		[SerializeField]
+		private GameObject shadowRendererPrefab;
 
 		void Awake () {
 
@@ -29,14 +33,22 @@ namespace Assets.Scripts {
 				var go = Instantiate (i == 0 ? levelToLoad.variant1 : levelToLoad.variant2,
 					levelRoots[i].transform.position, levelRoots[i].transform.rotation);
 
+				levelVariants[i] = go;
+
 				// apply camera-specific layer to objects
 				// (to only render them in their respective camera)
-				go.layer = levelRoots[i].layer;
-				foreach (Transform child in go.transform) {
-					// do not change layer if this is in Difference layer (used to mark diff colliders)
-					if (child.gameObject.layer == DiffHit.diffLayer) continue;
-					child.gameObject.layer = levelRoots[i].layer;
-				}
+				DiffHit.MoveToCameraLayer (go, i);
+			}
+
+			// create shadow renderers from 1st variant, on both variants
+			var children = levelToLoad.variant1.GetComponentsInChildren<MeshRenderer> ();
+			foreach (var child in children) {
+				CreateShadowRendererFor (child);
+			}
+
+			// hide realtime shadows on both variants
+			foreach (var lv in levelVariants) {
+				DisableShadows (lv.transform);
 			}
 
 			// apply bgColor to fog (disable fog if alpha = 0)
@@ -61,6 +73,38 @@ namespace Assets.Scripts {
 
 			levelToLoad = levelInfo;
 			SceneManager.LoadScene (levelSceneIndex);
+		}
+
+		private void DisableShadows (Transform tr) {
+
+			foreach (var mr in tr.GetComponentsInChildren<MeshRenderer> ()) {
+
+				if (mr.shadowCastingMode == UnityEngine.Rendering.ShadowCastingMode.On ||
+					mr.shadowCastingMode == UnityEngine.Rendering.ShadowCastingMode.TwoSided) {
+
+					mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+				}
+
+			}
+		}
+
+		private void CreateShadowRendererFor (MeshRenderer mr) {
+
+			if (!mr || mr.shadowCastingMode != UnityEngine.Rendering.ShadowCastingMode.On) return;
+
+			var mf = mr.GetComponent<MeshFilter> ();
+			if (!mf) return;
+
+			for (int i = 0; i < levelRoots.Length; i++) {
+				var go = Instantiate (shadowRendererPrefab, levelRoots[i].transform);
+				go.layer = CamControl.camLayers[i];
+				var mfNew = go.GetComponent<MeshFilter> ();
+				mfNew.sharedMesh = mf.sharedMesh;
+
+				var mrNew = go.GetComponent<MeshRenderer> ();
+				mrNew.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+				mrNew.sharedMaterial = mr.sharedMaterial;
+			}
 		}
 	}
 }

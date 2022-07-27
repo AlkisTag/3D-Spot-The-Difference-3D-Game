@@ -11,6 +11,7 @@ namespace Assets.Scripts {
 		private readonly HashSet<GameObject> foundDiffs = new HashSet<GameObject> ();
 		public GameObject markPrefab;
 		public WrongMark wrongMarkPrefab;
+		private const float maxMarkScale = 3f;
 
 		private Camera[] rayCams;
 		private const float maxDist = 1000f;
@@ -23,6 +24,8 @@ namespace Assets.Scripts {
 		public Text totalText;
 
 		public GameObject levelCompletedMenu;
+
+		public Canvas referenceCanvas;
 
 		private void Awake () {
 
@@ -69,11 +72,17 @@ namespace Assets.Scripts {
 
 				// show mark on both objects
 				var uniformScale = GetUniformScaleForMark (go.transform.localScale);
-				me.CreateMark (go.transform.position, uniformScale);
+				var markGo = me.CreateMark (go.transform.position, uniformScale);
+
 				if (me.camerasOffset != Vector3.zero) {
+
+					MoveToCameraLayer (markGo, cam == me.rayCams[0] ? 0 : 1);
 					var posDelta = cam == me.rayCams[0] ? me.camerasOffset : -me.camerasOffset;
-					me.CreateMark (go.transform.position + posDelta, uniformScale);
+					markGo = me.CreateMark (go.transform.position + posDelta, uniformScale);
+					MoveToCameraLayer (markGo, cam == me.rayCams[0] ? 1 : 0);
 				}
+
+				MarkFader.ShowMarks ();
 
 				// check if all differences found
 				if (IsLevelCompleted () && me.levelCompletedMenu) {
@@ -89,7 +98,7 @@ namespace Assets.Scripts {
 			Hearts.SetHearts (-1, true);
 		}
 
-		private void CreateMark (Vector3 pos, Vector3 scale) {
+		private GameObject CreateMark (Vector3 pos, Vector3 scale) {
 
 			var markGo = Instantiate (markPrefab, pos, Quaternion.identity);
 			markGo.transform.localScale = scale;
@@ -97,6 +106,8 @@ namespace Assets.Scripts {
 			if (mark) {
 				mark.UpdateDirection (me.rayCams[0].transform.forward);
 			}
+
+			return markGo;
 		}
 
 		private void CreateWrongMark (Vector2 pos) {
@@ -104,6 +115,11 @@ namespace Assets.Scripts {
 			var markGo = Instantiate (wrongMarkPrefab.gameObject, wrongMarkPrefab.transform.parent);
 			var rectTr = markGo.GetComponent<RectTransform> ();
 			rectTr.anchoredPosition = pos;
+
+			if (referenceCanvas) {
+				rectTr.localScale *= referenceCanvas.transform.localScale.x;
+			}
+
 			markGo.SetActive (true);
 		}
 
@@ -112,7 +128,20 @@ namespace Assets.Scripts {
 		private static Vector3 GetUniformScaleForMark (Vector3 scale) {
 
 			float max = Mathf.Max (Mathf.Abs (scale.x), Mathf.Abs (scale.y), Mathf.Abs (scale.z));
+			max = Mathf.Min (max, maxMarkScale);
 			return Vector3.one * max;
+		}
+
+		public static void MoveToCameraLayer (GameObject go, int cameraInd) {
+
+			if (!go || cameraInd < 0 || cameraInd >= CamControl.camLayers.Length) return;
+
+			go.layer = CamControl.camLayers[cameraInd];
+			foreach (Transform child in go.transform) {
+				// do not change layer if this is in Difference layer (used to mark diff colliders)
+				if (child.gameObject.layer == diffLayer) continue;
+				child.gameObject.layer = CamControl.camLayers[cameraInd];
+			}
 		}
 	}
 }
