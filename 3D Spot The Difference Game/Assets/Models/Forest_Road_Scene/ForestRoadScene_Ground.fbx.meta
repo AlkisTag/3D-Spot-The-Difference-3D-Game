@@ -7,6 +7,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: GamePalette.MAT.001
+    second: {fileID: 2100000, guid: 0cd6bc79b6e737647912a25077b22c23, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: GamePalette_MAT
     second: {fileID: 2100000, guid: 0cd6bc79b6e737647912a25077b22c23, type: 2}
   materials:
@@ -49,7 +54,7 @@ ModelImporter:
     importCameras: 1
     importLights: 1
     fileIdsGeneration: 2
-    swapUVChannels: 1
+    swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
     keepQuads: 0
