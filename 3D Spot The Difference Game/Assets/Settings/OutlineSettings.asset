@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b579424fd3338724cba3155ee4d53475, type: 3}
   m_Name: OutlineSettings
   m_EditorClassIdentifier: 
-  _outlineColor: {r: 1, g: 0, b: 0, a: 1}
-  _outlineWidth: 15
-  _outlineIntensity: 1.5
+  _outlineColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  _outlineWidth: 10
+  _outlineIntensity: 4
   _outlineAlphaCutoff: 0.9
   _outlineMode: 3
