@@ -9,14 +9,12 @@ namespace Assets.Scripts {
 		private static DiffHit me;
 
 		private readonly HashSet<GameObject> foundDiffs = new HashSet<GameObject> ();
-		public GameObject markPrefab;
 		public WrongMark wrongMarkPrefab;
-		private const float maxMarkScale = 3f;
 
 		private Camera[] rayCams;
 		private const float maxDist = 1000f;
-		public LayerMask layerMask;
-		public const int diffLayer = 3;
+		public LayerMask[] layerMasks = new LayerMask[2];
+		public static readonly int[] diffLayers = new int[] { 8, 9 };
 
 		private Vector3 camerasOffset;
 
@@ -47,7 +45,8 @@ namespace Assets.Scripts {
 			if (!me) return;
 
 			var initPos = screenPos;
-			foreach (var cam in me.rayCams) {
+			for (int i = 0; i < 2; i++) {
+				var cam = me.rayCams[i];
 
 				// get screen pos, adjusted into this camera's viewport
 				screenPos = initPos;
@@ -56,13 +55,13 @@ namespace Assets.Scripts {
 				var ray = cam.ScreenPointToRay (screenPos);
 
 				// if nothing hit, skip to next camera (if all checked, will lead to life loss below)
-				if (!Physics.Raycast (ray, out var hit, maxDist, me.layerMask) || hit.collider.gameObject.layer != diffLayer) {
+				if (!Physics.Raycast (ray, out var hit, maxDist, me.layerMasks[i]) || hit.collider.gameObject.layer != diffLayers[i]) {
 					continue;
 				}
 
 				// if tapped an already found difference, exit (no life loss)
 				var go = hit.collider.gameObject;
-				if (me.foundDiffs.Contains (go)) {
+				if (me.foundDiffs.Contains (go) || DiffItem.itemCopies.Contains (go)) {
 					return;
 				}
 
@@ -71,17 +70,7 @@ namespace Assets.Scripts {
 				me.foundText.text = me.foundDiffs.Count.ToString ();
 
 				// show mark on both objects
-				var uniformScale = GetUniformScaleForMark (go.transform.localScale);
-				var markGo = me.CreateMark (go.transform.position, uniformScale);
-
-				if (me.camerasOffset != Vector3.zero) {
-
-					MoveToCameraLayer (markGo, cam == me.rayCams[0] ? 0 : 1);
-					var posDelta = cam == me.rayCams[0] ? me.camerasOffset : -me.camerasOffset;
-					markGo = me.CreateMark (go.transform.position + posDelta, uniformScale);
-					MoveToCameraLayer (markGo, cam == me.rayCams[0] ? 1 : 0);
-				}
-
+				me.MarkFoundDiff (go);
 				MarkFader.ShowMarks ();
 
 				// check if all differences found
@@ -98,16 +87,25 @@ namespace Assets.Scripts {
 			Hearts.SetHearts (-1, true);
 		}
 
-		private GameObject CreateMark (Vector3 pos, Vector3 scale) {
+		private void MarkFoundDiff (GameObject go) {
 
-			var markGo = Instantiate (markPrefab, pos, Quaternion.identity);
-			markGo.transform.localScale = scale;
-			var mark = markGo.GetComponent<Billboard> ();
-			if (mark) {
-				mark.UpdateDirection (me.rayCams[0].transform.forward);
+			if (!go) return;
+
+			var mr = go.GetComponent<MeshRenderer> ();
+			if (!mr || mr.enabled) return;
+
+			mr.enabled = true;
+
+			if (camerasOffset != Vector3.zero) {
+
+				var diffLayerInd = go.layer == diffLayers[0] ? 1 : 0;
+				var posDelta = diffLayerInd == 1 ? camerasOffset : -camerasOffset;
+
+				var copy = Instantiate (go, go.transform.position + posDelta, go.transform.rotation);
+				DiffItem.itemCopies.Add (copy);
+
+				copy.layer = diffLayers[diffLayerInd];
 			}
-
-			return markGo;
 		}
 
 		private void CreateWrongMark (Vector2 pos) {
@@ -125,23 +123,23 @@ namespace Assets.Scripts {
 
 		public static bool IsLevelCompleted () => me && me.foundDiffs.Count >= DiffItem.items.Count && DiffItem.items.Count > 0;
 
-		private static Vector3 GetUniformScaleForMark (Vector3 scale) {
-
-			float max = Mathf.Max (Mathf.Abs (scale.x), Mathf.Abs (scale.y), Mathf.Abs (scale.z));
-			max = Mathf.Min (max, maxMarkScale);
-			return Vector3.one * max;
-		}
-
 		public static void MoveToCameraLayer (GameObject go, int cameraInd) {
 
 			if (!go || cameraInd < 0 || cameraInd >= CamControl.camLayers.Length) return;
 
 			go.layer = CamControl.camLayers[cameraInd];
 			foreach (Transform child in go.transform) {
-				// do not change layer if this is in Difference layer (used to mark diff colliders)
-				if (child.gameObject.layer == diffLayer) continue;
+				// do not change layer if this is in Difference layers (used to mark diff colliders)
+				if (IsInDiffLayer (child.gameObject)) continue;
+
 				child.gameObject.layer = CamControl.camLayers[cameraInd];
 			}
+		}
+
+		public static bool IsInDiffLayer (GameObject go) {
+
+			var lr = go.layer;
+			return lr == diffLayers[0] || lr == diffLayers[1];
 		}
 	}
 }

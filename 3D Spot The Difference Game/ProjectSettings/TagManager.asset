@@ -8,13 +8,13 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Difference
+  - 
   - Water
   - UI
   - Cam1
   - Cam2
-  - 
-  - 
+  - Difference1
+  - Difference2
   - 
   - 
   - 

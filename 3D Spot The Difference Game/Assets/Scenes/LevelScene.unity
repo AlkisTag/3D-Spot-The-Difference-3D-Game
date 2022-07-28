@@ -1069,11 +1069,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bf75d731cca29047a63bd47afd40b7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  markPrefab: {fileID: 7255067318524379751, guid: a22a50e635d62484799378e9ffa4e2e3, type: 3}
   wrongMarkPrefab: {fileID: 999540529}
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 200
+  layerMasks:
+  - serializedVersion: 2
+    m_Bits: 320
+  - serializedVersion: 2
+    m_Bits: 640
   foundText: {fileID: 166430461}
   totalText: {fileID: 238504436}
   levelCompletedMenu: {fileID: 2127076794}
@@ -2092,7 +2093,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 183
+    m_Bits: 695
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -3710,7 +3711,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 119
+    m_Bits: 375
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

@@ -3,39 +3,39 @@
 namespace Assets.Scripts {
 	public class MarkFader : MonoBehaviour {
 
-		private static MarkFader me;
+		//private static MarkFader me;
 
-		public Material markMat;
-		private Color initCol;
+		//public Material markMat;
+		//private Color initCol;
 
-		public float maxAlpha = 2f;
-		public float fadeRate = 1f;
-		private float timer;
+		//public float maxAlpha = 2f;
+		//public float fadeRate = 1f;
+		//private float timer;
 
-		void Awake () {
+		//void Awake () {
 
-			me = this;
-			initCol = markMat.color;
-		}
+		//	me = this;
+		//	initCol = markMat.color;
+		//}
 
-		private void OnDestroy () {
+		//private void OnDestroy () {
 
-			if (me == this) markMat.color = initCol;
-		}
+		//	if (me == this) markMat.color = initCol;
+		//}
 
-		void Update () {
+		//void Update () {
 
-			if (timer <= 0f) return;
+		//	if (timer <= 0f) return;
 
-			timer -= Time.deltaTime * fadeRate;
-			var c = initCol;
-			c.a *= Mathf.Clamp01 (timer);
-			markMat.color = c;
-		}
+		//	timer -= Time.deltaTime * fadeRate;
+		//	var c = initCol;
+		//	c.a *= Mathf.Clamp01 (timer);
+		//	markMat.color = c;
+		//}
 
 		public static void ShowMarks () {
 
-			if (me) me.timer = me.maxAlpha;
+			//if (me) me.timer = me.maxAlpha;
 		}
 	}
 }

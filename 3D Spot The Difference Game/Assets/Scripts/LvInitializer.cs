@@ -17,6 +17,8 @@ namespace Assets.Scripts {
 
 		void Awake () {
 
+			DiffItem.UnregisterItems ();
+
 			if (levelRoots == null || levelRoots.Length != 2 || !levelRoots[0] || !levelRoots[1]) {
 				Debug.LogError ("Invalid levelRoots array");
 				return;
@@ -34,6 +36,9 @@ namespace Assets.Scripts {
 					levelRoots[i].transform.position, levelRoots[i].transform.rotation);
 
 				levelVariants[i] = go;
+
+				// register diff items of variant
+				DiffItem.RegisterItems (go);
 
 				// apply camera-specific layer to objects
 				// (to only render them in their respective camera)
@@ -69,6 +74,10 @@ namespace Assets.Scripts {
 			}
 		}
 
+		private void OnDestroy () {
+			DiffItem.UnregisterItems ();
+		}
+
 		public static void TransitionToLevel (LevelInfo levelInfo) {
 
 			levelToLoad = levelInfo;
@@ -91,6 +100,8 @@ namespace Assets.Scripts {
 		private void CreateShadowRendererFor (MeshRenderer mr) {
 
 			if (!mr || mr.shadowCastingMode != UnityEngine.Rendering.ShadowCastingMode.On) return;
+
+			if (DiffHit.IsInDiffLayer (mr.gameObject)) return;
 
 			var mf = mr.GetComponent<MeshFilter> ();
 			if (!mf) return;
