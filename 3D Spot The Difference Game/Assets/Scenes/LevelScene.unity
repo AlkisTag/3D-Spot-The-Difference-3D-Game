@@ -1095,6 +1095,7 @@ MonoBehaviour:
   - {fileID: 1188276543}
   - {fileID: 2127662384}
   shadowRendererPrefab: {fileID: 1589741620407459526, guid: fbec58ac6c55c3d418586ca8894a1f8a, type: 3}
+  outlineSettings: {fileID: 11400000, guid: 8f4c08688ef02ca4fa8bb22fc93e90c3, type: 2}
 --- !u!114 &359680488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1125,9 +1126,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58fb054d29ee570408e73ddabc042e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  markMat: {fileID: 2100000, guid: fffd3f46707180447925c91b7ba3c1ff, type: 2}
-  maxAlpha: 2
-  fadeRate: 1
 --- !u!1 &396737915
 GameObject:
   m_ObjectHideFlags: 0

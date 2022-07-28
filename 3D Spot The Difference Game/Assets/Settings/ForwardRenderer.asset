@@ -58,7 +58,7 @@ MonoBehaviour:
   _outlineResources: {fileID: 11400000, guid: 231d88937a104094b8e4e0fdb8d2e77b, type: 2}
   _outlineLayers: {fileID: 0}
   _outlineSettings:
-    _outlineSettings: {fileID: 0}
+    _outlineSettings: {fileID: 11400000, guid: 8f4c08688ef02ca4fa8bb22fc93e90c3, type: 2}
     _outlineColor: {r: 0.17895651, g: 1, b: 0, a: 1}
     _outlineWidth: 15
     _outlineIntensity: 2

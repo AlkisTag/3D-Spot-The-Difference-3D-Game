@@ -9,5 +9,6 @@ namespace Assets.Scripts {
 		public GameObject variant1;
 		public GameObject variant2;
 		public Color bgColor;
+		public Color diffOutlineColor = Color.yellow;
 	}
 }

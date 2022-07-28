@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityFx.Outline;
 
 namespace Assets.Scripts {
 	public class LvInitializer : MonoBehaviour {
@@ -14,6 +15,10 @@ namespace Assets.Scripts {
 
 		[SerializeField]
 		private GameObject shadowRendererPrefab;
+
+		[SerializeField]
+		private OutlineSettings outlineSettings;
+		private Color initOutlineColor;
 
 		void Awake () {
 
@@ -64,6 +69,10 @@ namespace Assets.Scripts {
 				RenderSettings.fog = true;
 				RenderSettings.fogColor = levelToLoad.bgColor;
 			}
+
+			// apply outline color
+			initOutlineColor = outlineSettings.OutlineColor;
+			outlineSettings.OutlineColor = levelToLoad.diffOutlineColor;
 		}
 
 		private void Start () {
@@ -76,6 +85,7 @@ namespace Assets.Scripts {
 
 		private void OnDestroy () {
 			DiffItem.UnregisterItems ();
+			outlineSettings.OutlineColor = initOutlineColor;
 		}
 
 		public static void TransitionToLevel (LevelInfo levelInfo) {
