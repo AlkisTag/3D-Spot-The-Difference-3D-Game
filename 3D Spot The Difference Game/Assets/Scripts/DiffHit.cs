@@ -72,6 +72,7 @@ namespace Assets.Scripts {
 				// show mark on both objects
 				me.MarkFoundDiff (go);
 				MarkFader.ShowMarks ();
+				ScreenFlash.FlashGood ();
 
 				// check if all differences found
 				if (IsLevelCompleted () && me.levelCompletedMenu) {
@@ -85,6 +86,7 @@ namespace Assets.Scripts {
 			// if we reached this point, tap was a miss, so lose life
 			me.CreateWrongMark (initPos);
 			Hearts.LoseHeartWithAnim (initPos);
+			ScreenFlash.FlashBad ();
 		}
 
 		private void MarkFoundDiff (GameObject go) {
