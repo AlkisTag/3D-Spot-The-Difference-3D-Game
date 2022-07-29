@@ -1081,6 +1081,8 @@ MonoBehaviour:
   totalText: {fileID: 238504436}
   levelCompletedMenu: {fileID: 2127076794}
   referenceCanvas: {fileID: 1194712152}
+  sparklesPrefabSphere: {fileID: 2949698187947090944, guid: b72e34e9365705147b68fdf76798b409, type: 3}
+  sparklesPrefabBox: {fileID: 40907241811563837, guid: 98bb283334f0f904fa5eab9362092dae, type: 3}
 --- !u!114 &359680487
 MonoBehaviour:
   m_ObjectHideFlags: 0

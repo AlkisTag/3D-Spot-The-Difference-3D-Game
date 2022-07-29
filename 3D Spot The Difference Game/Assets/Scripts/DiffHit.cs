@@ -25,6 +25,9 @@ namespace Assets.Scripts {
 
 		public Canvas referenceCanvas;
 
+		public ParticleSystem sparklesPrefabSphere;
+		public ParticleSystem sparklesPrefabBox;
+
 		private void Awake () {
 
 			me = this;
@@ -68,6 +71,7 @@ namespace Assets.Scripts {
 				// mark found difference
 				me.foundDiffs.Add (go);
 				me.foundText.text = me.foundDiffs.Count.ToString ();
+				me.CreateSparklesOn (go);
 
 				// show mark on both objects
 				me.MarkFoundDiff (go);
@@ -121,6 +125,39 @@ namespace Assets.Scripts {
 			}
 
 			markGo.SetActive (true);
+		}
+
+		private void CreateSparklesOn (GameObject item) {
+
+			if (!item) return;
+
+			GameObject go;
+			ParticleSystem prt;
+
+			// emit with box shape if item has BoxCollider
+			var bc = item.GetComponentInChildren<BoxCollider> ();
+			if (bc) {
+				go = Instantiate (sparklesPrefabBox.gameObject, item.transform.position, item.transform.rotation);
+				go.transform.localScale = item.transform.localScale;
+
+				prt = go.GetComponent<ParticleSystem> ();
+				var shape = prt.shape;
+				shape.position = bc.center;
+				shape.scale = bc.size - Vector3.one * DiffItem.extendBox;
+				return;
+			}
+
+			// emit with sphere shape if item has SphereCollider
+			var sc = item.GetComponentInChildren<SphereCollider> ();
+			if (sc) {
+				go = Instantiate (sparklesPrefabSphere.gameObject, item.transform.position, item.transform.rotation);
+				go.transform.localScale = item.transform.localScale;
+
+				prt = go.GetComponent<ParticleSystem> ();
+				var shape = prt.shape;
+				shape.position = sc.center;
+				shape.radius = sc.radius - DiffItem.extendSphere;
+			}
 		}
 
 		public static bool IsLevelCompleted () => me && me.foundDiffs.Count >= DiffItem.items.Count && DiffItem.items.Count > 0;
