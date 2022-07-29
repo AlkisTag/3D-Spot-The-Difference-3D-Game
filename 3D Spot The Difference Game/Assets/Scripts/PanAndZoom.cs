@@ -15,7 +15,7 @@ public class PanAndZoom : MonoBehaviour {
 	/// <summary> Called if the player swiped the screen. The argument is the screen movement delta. </summary>
 	public event Action<Vector2> onSwipe;
 	/// <summary> Called if the player pinched the screen. The arguments are the distance between the fingers before and after, the end screen position, and screen movement delta. </summary>
-	public event Action<float, float, Vector2, Vector2> onPinch;
+	public event Action<float, float, Vector2, Vector2, float> onPinch;
 
 	[Header ("Tap")]
 	[Tooltip ("The maximum movement for a touch motion to be treated as a tap")]
@@ -81,7 +81,7 @@ public class PanAndZoom : MonoBehaviour {
 			momentum = Vector2.SmoothDamp (momentum, move, ref momentumLerpSpeed, momentumLerpTime);
 
 			if (move != Vector2.zero) {
-				if (Input.GetKey (KeyCode.LeftShift)) OnPinch (Input.mousePosition, 1f, 1f, move);
+				if (Input.GetKey (KeyCode.LeftShift)) OnPinch (Input.mousePosition, 1f, 1f, move, 0f);
 				else OnSwipe (move);
 			}
 		}
@@ -100,7 +100,7 @@ public class PanAndZoom : MonoBehaviour {
 		}
 
 		if (Input.mouseScrollDelta.y != 0) {
-			OnPinch (Input.mousePosition, 1, Input.mouseScrollDelta.y < 0 ? (1 / mouseScrollSpeed) : mouseScrollSpeed, Vector2.zero);
+			OnPinch (Input.mousePosition, 1, Input.mouseScrollDelta.y < 0 ? (1 / mouseScrollSpeed) : mouseScrollSpeed, Vector2.zero, 0f);
 		}
 	}
 
@@ -167,11 +167,15 @@ public class PanAndZoom : MonoBehaviour {
 			float previousDistance = Vector2.Distance (prev0, prev1);
 			float currentDistance = Vector2.Distance (touch0.position, touch1.position);
 
+			float rot = 0f;
+			if (previousDistance > 1f && currentDistance > 1f) {
+				rot = Vector2.SignedAngle (touch0.position - touch1.position, prev0 - prev1);
+			}
+
 			Vector2 center = (touch0.position + touch1.position) * .5f;
 			Vector2 centerPrev = (prev0 + prev1) * .5f;
-			if (previousDistance != currentDistance || center != centerPrev) {
-				OnPinch (center, previousDistance, currentDistance, center - centerPrev);
-			}
+			OnPinch (center, previousDistance, currentDistance, center - centerPrev, rot);
+
 			momentum = Vector2.SmoothDamp (momentum, center - centerPrev, ref momentumLerpSpeed, momentumLerpTime);
 		}
 		else {
@@ -194,8 +198,8 @@ public class PanAndZoom : MonoBehaviour {
 		onSwipe?.Invoke (deltaPosition);
 	}
 
-	void OnPinch (Vector2 center, float oldDistance, float newDistance, Vector2 touchDelta) {
-		onPinch?.Invoke (oldDistance, newDistance, center, touchDelta);
+	void OnPinch (Vector2 center, float oldDistance, float newDistance, Vector2 touchDelta, float rotation) {
+		onPinch?.Invoke (oldDistance, newDistance, center, touchDelta, rotation);
 	}
 
 	/// <summary> Checks if the the current input is over canvas UI </summary>

@@ -52,12 +52,12 @@ namespace Assets.Scripts {
 			camInitPos = cams[0].transform.localPosition;
 		}
 
-		private void PanAndZoom_onPinch (float distOld, float distNew, Vector2 pos, Vector2 delta) {
+		private void PanAndZoom_onPinch (float distOld, float distNew, Vector2 pos, Vector2 delta, float rot) {
 
-			PanAndZoom_onPinchChecked (distOld, distNew, pos, delta);
+			PanAndZoom_onPinchChecked (distOld, distNew, pos, delta, rot);
 		}
 
-		private void PanAndZoom_onPinchChecked (float distOld, float distNew, Vector2 pos, Vector2 delta, bool forced = false) {
+		private void PanAndZoom_onPinchChecked (float distOld, float distNew, Vector2 pos, Vector2 delta, float rot, bool forced = false) {
 
 			if (!forced && Hearts.IsGameOver (true)) return;
 
@@ -78,6 +78,7 @@ namespace Assets.Scripts {
 				c.fieldOfView = fov;
 				c.transform.localPosition = camPos;
 			}
+			RotateY (rot);
 
 			MarkFader.ShowMarks ();
 		}
@@ -115,7 +116,7 @@ namespace Assets.Scripts {
 
 		private void RotateFromScreenDelta (Vector2 delta) {
 
-			if (Hearts.IsGameOver (true)) return;
+			if (delta == Vector2.zero || Hearts.IsGameOver (true)) return;
 
 			var sens = turnSens * (fov / fovMax);
 			pivotRot = (pivotRot + delta.x * sens.x) % 360f;
@@ -135,12 +136,27 @@ namespace Assets.Scripts {
 			Billboard.UpdateBillboards (camFwd);
 		}
 
+		private void RotateY (float degrees) {
+
+			if (degrees == 0f || Hearts.IsGameOver (true)) return;
+
+			pivotRot = (pivotRot - degrees) % 360f;
+
+			var rot = Quaternion.Euler (0, pivotRot, 0);
+			foreach (var p in pivots) {
+				p.localRotation = rot;
+			}
+
+			var camFwd = cams[0].transform.forward;
+			Billboard.UpdateBillboards (camFwd);
+		}
+
 		void Update () {
 
 			if (DiffHit.IsLevelCompleted ()) {
 
 				PanAndZoom_onPinchChecked (levelClearUnzoomRate, 1f,
-					new Vector2 (Screen.width * .5f, Screen.height * .25f), Vector2.zero, true);
+					new Vector2 (Screen.width * .5f, Screen.height * .25f), Vector2.zero, 0f, true);
 
 				MarkFader.ShowMarks ();
 				return;
