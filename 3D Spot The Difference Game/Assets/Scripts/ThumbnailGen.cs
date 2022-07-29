@@ -82,7 +82,7 @@ namespace Assets.Scripts {
 			Debug.Log ("Done!", gameObject);
 		}
 
-		private static string SimplifyName (string n) {
+		public static string SimplifyName (string n) {
 
 			var rgx = new System.Text.RegularExpressions.Regex ("[^a-zA-Z0-9-]");
 			n = rgx.Replace (n, "");
