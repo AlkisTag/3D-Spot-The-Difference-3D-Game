@@ -71,7 +71,6 @@ namespace Assets.Scripts {
 				// mark found difference
 				me.foundDiffs.Add (go);
 				me.foundText.text = me.foundDiffs.Count.ToString ();
-				me.CreateSparklesOn (go);
 
 				// show mark on both objects
 				me.MarkFoundDiff (go);
@@ -101,16 +100,19 @@ namespace Assets.Scripts {
 			if (!mr || mr.enabled) return;
 
 			mr.enabled = true;
+			CreateSparklesOn (go);
 
 			if (camerasOffset != Vector3.zero) {
 
-				var diffLayerInd = go.layer == diffLayers[0] ? 1 : 0;
-				var posDelta = diffLayerInd == 1 ? camerasOffset : -camerasOffset;
+				var isFirstLayer = go.layer == diffLayers[0];
+				var diffLayerInd = isFirstLayer ? 1 : 0;
+				var posDelta = isFirstLayer ? camerasOffset : -camerasOffset;
 
 				var copy = Instantiate (go, go.transform.position + posDelta, go.transform.rotation);
 				DiffItem.itemCopies.Add (copy);
 
 				copy.layer = diffLayers[diffLayerInd];
+				CreateSparklesOn (copy);
 			}
 		}
 
@@ -131,33 +133,36 @@ namespace Assets.Scripts {
 
 			if (!item) return;
 
-			GameObject go;
+			GameObject go = null;
 			ParticleSystem prt;
 
 			// emit with box shape if item has BoxCollider
 			var bc = item.GetComponentInChildren<BoxCollider> ();
 			if (bc) {
 				go = Instantiate (sparklesPrefabBox.gameObject, item.transform.position, item.transform.rotation);
-				go.transform.localScale = item.transform.localScale;
 
 				prt = go.GetComponent<ParticleSystem> ();
 				var shape = prt.shape;
 				shape.position = bc.center;
 				shape.scale = bc.size - Vector3.one * DiffItem.extendBox;
-				return;
+			}
+			else {
+				// emit with sphere shape if item has SphereCollider
+				var sc = item.GetComponentInChildren<SphereCollider> ();
+				if (sc) {
+					go = Instantiate (sparklesPrefabSphere.gameObject, item.transform.position, item.transform.rotation);
+
+					prt = go.GetComponent<ParticleSystem> ();
+					var shape = prt.shape;
+					shape.position = sc.center;
+					shape.radius = sc.radius - DiffItem.extendSphere;
+				}
 			}
 
-			// emit with sphere shape if item has SphereCollider
-			var sc = item.GetComponentInChildren<SphereCollider> ();
-			if (sc) {
-				go = Instantiate (sparklesPrefabSphere.gameObject, item.transform.position, item.transform.rotation);
-				go.transform.localScale = item.transform.localScale;
+			if (!go) return;
 
-				prt = go.GetComponent<ParticleSystem> ();
-				var shape = prt.shape;
-				shape.position = sc.center;
-				shape.radius = sc.radius - DiffItem.extendSphere;
-			}
+			go.transform.localScale = item.transform.localScale;
+			go.layer = CamControl.camLayers[item.layer == diffLayers[0] ? 0 : 1];
 		}
 
 		public static bool IsLevelCompleted () => me && me.foundDiffs.Count >= DiffItem.items.Count && DiffItem.items.Count > 0;
