@@ -32,12 +32,16 @@ namespace Assets.Scripts {
 
 			img = GetComponent<Image> ();
 			initCol = img.color;
-			initScale = transform.localScale;
 
 			rtr = GetComponent<RectTransform> ();
-			initPos = rtr.anchoredPosition;
 
 			spinDir = Random.value > .5f ? 1f : -1f;
+		}
+
+		private void Start () {
+
+			initScale = transform.localScale;
+			initPos = rtr.anchoredPosition;
 		}
 
 		void Update () {
