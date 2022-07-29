@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace Assets.Scripts {
 	public class MainMenu : MonoBehaviour {
+
+		private static MainMenu me;
 
 		public const int sceneIndex = 1;
 
@@ -13,35 +14,22 @@ namespace Assets.Scripts {
 		private Sprite[] levelThumbnails;
 
 		[SerializeField]
-		private Button levelBtnTemplate;
+		private LevelButton levelBtnTemplate;
 
-		[SerializeField]
-		private bool btnHasText;
+		private void Awake () {
 
-		[SerializeField]
-		private int btnImageChildIndex = -1;
+			me = this;
+		}
 
 		private void Start () {
 
 			foreach (var lv in levelInfos) {
 
 				var go = Instantiate (levelBtnTemplate.gameObject, levelBtnTemplate.transform.parent);
-
-				if (btnHasText) {
-					var txt = go.GetComponentInChildren<Text> ();
-					txt.text = lv.name;
-				}
-
-				if (btnImageChildIndex >= 0) {
-					var imgChild = go.transform.GetChild (btnImageChildIndex);
-					var img = imgChild.GetComponent<Image> ();
-					img.sprite = GetLevelThumbnail (lv);
-				}
-
-				var btn = go.GetComponent<Button> ();
-				btn.onClick.AddListener (() => TransitionToLevel (lv));
-
 				go.SetActive (true);
+
+				var btn = go.GetComponent<LevelButton> ();
+				btn.SetLevelAndThumbnail (lv, GetLevelThumbnail (lv));
 			}
 		}
 
@@ -57,6 +45,11 @@ namespace Assets.Scripts {
 			}
 
 			return null;
+		}
+
+		public static void RequestTransitionToLevel (LevelInfo levelInfo) {
+
+			if (me) me.TransitionToLevel (levelInfo);
 		}
 
 		public void TransitionToLevel (LevelInfo levelInfo) {
