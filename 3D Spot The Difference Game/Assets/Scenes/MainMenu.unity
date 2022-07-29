@@ -431,7 +431,7 @@ MonoBehaviour:
   - name: Christmas Tree
     variant1: {fileID: 6239632098575263357, guid: dd9b38e0dd3a3eb4e856aff9a8722ebb, type: 3}
     variant2: {fileID: 7249366465737856874, guid: f1e3c3964e6392f43ac2a9ec198f590b, type: 3}
-    bgColor: {r: 0.4117647, g: 0.7882353, b: 0.9137255, a: 1}
+    bgColor: {r: 0.41251338, g: 0.677747, b: 0.8490566, a: 1}
     diffOutlineColor: {r: 1, g: 0.6440393, b: 0.015686274, a: 1}
   levelBtnTemplate: {fileID: 2033503280}
 --- !u!114 &645308176
