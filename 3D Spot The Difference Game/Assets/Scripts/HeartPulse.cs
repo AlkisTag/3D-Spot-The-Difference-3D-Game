@@ -24,7 +24,7 @@ namespace Assets.Scripts {
 		void Update () {
 
 			timer += Time.unscaledDeltaTime;
-			if (timer > maxScale) {
+			if (timer > animDur) {
 				Destroy (gameObject);
 				return;
 			}

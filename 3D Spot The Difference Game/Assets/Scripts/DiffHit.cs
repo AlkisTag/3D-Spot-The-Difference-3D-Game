@@ -84,7 +84,7 @@ namespace Assets.Scripts {
 
 			// if we reached this point, tap was a miss, so lose life
 			me.CreateWrongMark (initPos);
-			Hearts.SetHearts (-1, true);
+			Hearts.LoseHeartWithAnim (initPos);
 		}
 
 		private void MarkFoundDiff (GameObject go) {
