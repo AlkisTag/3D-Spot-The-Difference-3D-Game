@@ -192,5 +192,14 @@ namespace Assets.Scripts {
 			// simulate zoom to clamp current zoom if needed
 			me.PanAndZoom_onPinchChecked (1f, 1f, Vector2.zero, Vector2.zero, 0f);
 		}
+
+		public static void AdjustControlsToLevel (LevelType levelType) {
+
+			if (!me) return;
+
+			if (levelType == LevelType.Floating) {
+				me.tiltRotMin = -3f * me.tiltRotMax;
+			}
+		}
 	}
 }

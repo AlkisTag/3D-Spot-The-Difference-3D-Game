@@ -96,6 +96,9 @@ namespace Assets.Scripts {
 
 			// modify min/max zoom
 			CamControl.ModifyMinMaxZoom (levelToLoad.minZoomFactor, levelToLoad.maxZoomFactor);
+
+			// set level-specific camera controls
+			CamControl.AdjustControlsToLevel (levelToLoad.type);
 		}
 
 		private void OnDestroy () {
