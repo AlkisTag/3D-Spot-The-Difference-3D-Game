@@ -182,7 +182,8 @@ namespace Assets.Scripts {
 			if (!me) return;
 
 			if (minZoomFactor > 0) {
-				me.fovMax /= minZoomFactor;
+				me.fovMax *= minZoomFactor;
+				ThumbnailGen.ModifyCameraFov (minZoomFactor);
 			}
 			if (maxZoomFactor > 0) {
 				me.fovMin /= maxZoomFactor;

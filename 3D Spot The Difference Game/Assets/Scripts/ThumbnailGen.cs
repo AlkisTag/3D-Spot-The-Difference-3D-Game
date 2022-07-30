@@ -95,5 +95,13 @@ namespace Assets.Scripts {
 			if (!me) return;
 			me.cam.backgroundColor = bgColor;
 		}
+
+		public static void ModifyCameraFov (float fovFactor) {
+
+			if (!me) return;
+			if (fovFactor > 0) {
+				me.cam.fieldOfView *= fovFactor;
+			}
+		}
 	}
 }

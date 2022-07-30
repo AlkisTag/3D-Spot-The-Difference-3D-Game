@@ -518,7 +518,7 @@ MonoBehaviour:
     bgColor: {r: 0.41251338, g: 0.677747, b: 0.8490566, a: 1}
     diffOutlineColor: {r: 1, g: 0.6440393, b: 0.015686274, a: 1}
     relativeExposure: 0
-    minZoomFactor: 1
+    minZoomFactor: 0.75
     maxZoomFactor: 1
   - name: Floating Island
     variant1: {fileID: 8036787868907441932, guid: 4344a5b13f36cbc408b38676494f12c7, type: 3}
