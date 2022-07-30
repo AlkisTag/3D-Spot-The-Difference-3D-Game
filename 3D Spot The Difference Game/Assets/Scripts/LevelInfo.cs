@@ -10,5 +10,6 @@ namespace Assets.Scripts {
 		public GameObject variant2;
 		public Color bgColor;
 		public Color diffOutlineColor = Color.yellow;
+		public float relativeExposure;
 	}
 }

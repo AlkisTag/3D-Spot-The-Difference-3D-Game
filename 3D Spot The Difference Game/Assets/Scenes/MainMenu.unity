@@ -498,16 +498,19 @@ MonoBehaviour:
     variant2: {fileID: 5972275174377234194, guid: 2ad79aa839cd02444a64638a5e5f171e, type: 3}
     bgColor: {r: 0.78431374, g: 0.76862746, b: 0.7058824, a: 1}
     diffOutlineColor: {r: 1, g: 0.7964687, b: 0.015686274, a: 1}
+    relativeExposure: 0
   - name: Shop
     variant1: {fileID: 5955762499546409103, guid: 1b89761237c97234bb37d18dc7a527cf, type: 3}
     variant2: {fileID: 2343790157954551600, guid: 1e5fa389c821336499c81eceeee5caea, type: 3}
     bgColor: {r: 0.78431374, g: 0.76862746, b: 0.7058824, a: 1}
     diffOutlineColor: {r: 0.015686274, g: 1, b: 0.080228075, a: 1}
+    relativeExposure: 0.2
   - name: Christmas Tree
     variant1: {fileID: 6239632098575263357, guid: dd9b38e0dd3a3eb4e856aff9a8722ebb, type: 3}
     variant2: {fileID: 7249366465737856874, guid: f1e3c3964e6392f43ac2a9ec198f590b, type: 3}
     bgColor: {r: 0.41251338, g: 0.677747, b: 0.8490566, a: 1}
     diffOutlineColor: {r: 1, g: 0.6440393, b: 0.015686274, a: 1}
+    relativeExposure: 0
   levelThumbnails:
   - {fileID: 21300000, guid: d5379ec8a5762a54ab64bcc65dce9d8f, type: 3}
   - {fileID: 21300000, guid: 43ec884b084ee3147ac88b637e7ad73f, type: 3}

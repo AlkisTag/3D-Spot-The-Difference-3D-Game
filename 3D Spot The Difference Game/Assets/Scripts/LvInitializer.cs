@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityFx.Outline;
 
@@ -17,12 +19,18 @@ namespace Assets.Scripts {
 		private GameObject shadowRendererPrefab;
 
 		[SerializeField]
+		private Volume postProcess;
+		private ColorAdjustments colorAdjustments;
+
+		[SerializeField]
 		private OutlineSettings outlineSettings;
 		private Color initOutlineColor;
 
 		void Awake () {
 
 			DiffItem.UnregisterItems ();
+
+			postProcess.profile.TryGet (out colorAdjustments);
 
 			if (levelRoots == null || levelRoots.Length != 2 || !levelRoots[0] || !levelRoots[1]) {
 				Debug.LogError ("Invalid levelRoots array");
@@ -69,6 +77,9 @@ namespace Assets.Scripts {
 				RenderSettings.fog = true;
 				RenderSettings.fogColor = levelToLoad.bgColor;
 			}
+
+			// apply relative exposure
+			colorAdjustments.postExposure.value += levelToLoad.relativeExposure;
 
 			// apply outline color
 			initOutlineColor = outlineSettings.OutlineColor;

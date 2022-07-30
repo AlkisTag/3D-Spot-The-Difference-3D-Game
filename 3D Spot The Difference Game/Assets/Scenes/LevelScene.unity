@@ -1020,7 +1020,7 @@ MonoBehaviour:
   - {fileID: 637814352}
   tiltRotMin: -40
   tiltRotMax: 40
-  fovMin: 15
+  fovMin: 10
   fovMax: 45
   turnSens: {x: 0.25, y: -0.25}
   turnMomentumDecay: 0.4
@@ -1099,6 +1099,7 @@ MonoBehaviour:
   - {fileID: 1188276543}
   - {fileID: 2127662384}
   shadowRendererPrefab: {fileID: 1589741620407459526, guid: fbec58ac6c55c3d418586ca8894a1f8a, type: 3}
+  postProcess: {fileID: 653260036}
   outlineSettings: {fileID: 11400000, guid: 8f4c08688ef02ca4fa8bb22fc93e90c3, type: 2}
 --- !u!114 &359680488
 MonoBehaviour:
