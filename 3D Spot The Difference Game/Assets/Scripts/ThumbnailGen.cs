@@ -85,8 +85,7 @@ namespace Assets.Scripts {
 		public static string SimplifyName (string n) {
 
 			var rgx = new System.Text.RegularExpressions.Regex ("[^a-zA-Z0-9-]");
-			n = rgx.Replace (n, "");
-			n = n.ToLowerInvariant ().Replace (' ', '-');
+			n = rgx.Replace (n, "").ToLowerInvariant ();
 
 			return n;
 		}
