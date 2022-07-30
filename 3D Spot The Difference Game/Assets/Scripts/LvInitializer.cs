@@ -92,6 +92,10 @@ namespace Assets.Scripts {
 			foreach (var cam in CamControl.GetCameras ()) {
 				cam.backgroundColor = levelToLoad.bgColor;
 			}
+			ThumbnailGen.SetCameraBG (levelToLoad.bgColor);
+
+			// modify min/max zoom
+			CamControl.ModifyMinMaxZoom (levelToLoad.minZoomFactor, levelToLoad.maxZoomFactor);
 		}
 
 		private void OnDestroy () {

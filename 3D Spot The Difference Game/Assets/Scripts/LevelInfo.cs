@@ -11,5 +11,7 @@ namespace Assets.Scripts {
 		public Color bgColor;
 		public Color diffOutlineColor = Color.yellow;
 		public float relativeExposure;
+		public float minZoomFactor = 1f;
+		public float maxZoomFactor = 1f;
 	}
 }

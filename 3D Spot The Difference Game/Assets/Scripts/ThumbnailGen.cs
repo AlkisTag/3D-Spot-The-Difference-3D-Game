@@ -89,5 +89,11 @@ namespace Assets.Scripts {
 
 			return n;
 		}
+
+		public static void SetCameraBG (Color bgColor) {
+
+			if (!me) return;
+			me.cam.backgroundColor = bgColor;
+		}
 	}
 }

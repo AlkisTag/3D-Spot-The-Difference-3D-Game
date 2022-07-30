@@ -176,5 +176,21 @@ namespace Assets.Scripts {
 			if (!me || me.cams == null || index < 0 || index >= me.cams.Length) return null;
 			return me.cams[index];
 		}
+
+		public static void ModifyMinMaxZoom (float minZoomFactor, float maxZoomFactor) {
+
+			if (!me) return;
+
+			if (minZoomFactor > 0) {
+				me.fovMax /= minZoomFactor;
+			}
+			if (maxZoomFactor > 0) {
+				me.fovMin /= maxZoomFactor;
+				me.maxPan /= maxZoomFactor;
+			}
+
+			// simulate zoom to clamp current zoom if needed
+			me.PanAndZoom_onPinchChecked (1f, 1f, Vector2.zero, Vector2.zero, 0f);
+		}
 	}
 }
