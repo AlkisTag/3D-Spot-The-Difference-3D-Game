@@ -15,6 +15,8 @@ namespace Assets.Scripts {
 		private float pivotRot = 150;
 		public float tiltRotMin = -40;
 		public float tiltRotMax = 40;
+		public bool hasGround;
+		public float groundClearance = .5f;
 
 		private float fov;
 		public float fovMin = 24f;
@@ -28,11 +30,16 @@ namespace Assets.Scripts {
 
 		public Vector2 maxPan = new Vector2 (5f, 5f);
 		private Vector2 curPan;
-		public float panSens = .1f;
+		public float panZoomSens = .1f;
 		private Vector3 camInitPos;
 
 		[SerializeField]
 		private float levelClearUnzoomRate = .9f;
+
+		private const float minCamYForGroundPan = .2f;
+		private int curFingers = 0;
+		private Vector3 motionOrigin;
+		private int panCurCameraIndex = 0;
 
 		void Awake () {
 
@@ -61,31 +68,29 @@ namespace Assets.Scripts {
 
 			if (!forced && Hearts.IsGameOver (true)) return;
 
+			SetCurFingers (2, pos);
+
 			float mul = distOld / distNew;
 			fov = Mathf.Clamp (fov * mul, fovMin, fovMax);
-
-			float fovNormalized = 1f - (fov - fovMin) / (fovMax - fovMin);
-			Vector2 maxPanNorm = maxPan * fovNormalized;
-			Vector2 screenCenter = new Vector2 (Screen.width * .5f,
-				pos.y > Screen.height * .5f ? Screen.height * .75f : Screen.height * .25f);
-			Vector2 centerDelta = pos - screenCenter;
-			curPan = curPan * mul - fovNormalized * panSens * delta + Mathf.Max (0f, 1f / mul - 1f) * panSens * centerDelta;
-			curPan = new Vector2 (
-				Mathf.Clamp (curPan.x, -maxPanNorm.x, maxPanNorm.x),
-				Mathf.Clamp (curPan.y, -maxPanNorm.y, maxPanNorm.y));
-			Vector3 camPos = camInitPos + (Vector3)curPan;
 			foreach (var c in cams) {
 				c.fieldOfView = fov;
-				c.transform.localPosition = camPos;
 			}
+
 			RotateY (rot);
+			var correctedPos = pos;
+			if (panCurCameraIndex == 1) {
+				correctedPos.y -= Screen.height * .5f;
+			}
+			PanCameraToPoint (motionOrigin, correctedPos, false);
 
 			MarkFader.ShowMarks ();
 		}
 
-		private void PanAndZoom_onSwipe (Vector2 delta) {
+		private void PanAndZoom_onSwipe (Vector2 delta, Vector2 pos) {
 
 			if (Hearts.IsGameOver (true)) return;
+
+			SetCurFingers (1, GetLowerScreenCenter ());
 
 			RotateFromScreenDelta (delta);
 			if (panAndZoom.IsHeldDown ()) MarkFader.ShowMarks ();
@@ -95,12 +100,16 @@ namespace Assets.Scripts {
 
 			if (Hearts.IsGameOver (true)) return;
 
-			DiffHit.RegisterTap (pos);
+			if (pos.x > 0 && pos.y > 0 && pos.x < Screen.width && pos.y < Screen.height) {
+				DiffHit.RegisterTap (pos);
+			}
 		}
 
 		private void PanAndZoom_onEndTouch (Vector2 pos, Vector2 vel) {
 
 			if (Hearts.IsGameOver (true)) return;
+
+			SetCurFingers (0, pos);
 
 			turnMomentum = vel;
 			turnMomentumDelta = Vector2.zero;
@@ -132,6 +141,8 @@ namespace Assets.Scripts {
 				t.localRotation = rot;
 			}
 
+			PanCameraToPoint (motionOrigin, GetLowerScreenCenter ());
+
 			var camFwd = cams[0].transform.forward;
 			Billboard.UpdateBillboards (camFwd);
 		}
@@ -151,12 +162,99 @@ namespace Assets.Scripts {
 			Billboard.UpdateBillboards (camFwd);
 		}
 
+		private void SetCurFingers (int fingers, Vector2 screenPos) {
+
+			if (curFingers == fingers) return;
+			curFingers = fingers;
+
+			if (curFingers > 0) {
+				motionOrigin = GetCameraAimedPos (screenPos);
+				if (curFingers == 2) {
+					panCurCameraIndex = screenPos.y > Screen.height * .5f ? 1 : 0;
+				}
+			}
+		}
+
+		private void PanCameraToPoint (Vector3 worldPoint, Vector2 atScreenPoint, bool clampToCamera = true) {
+
+			var cam = cams[0];
+
+			var newLocalPoint = cam.transform.InverseTransformPoint (worldPoint);
+
+			if (clampToCamera) {
+				atScreenPoint.y %= Screen.height * .5f;
+			}
+
+			var screenPoint3D = new Vector3 (atScreenPoint.x, atScreenPoint.y, newLocalPoint.z);
+			var oldWorldPoint = cam.ScreenToWorldPoint (screenPoint3D);
+			var oldLocalPoint = cam.transform.InverseTransformPoint (oldWorldPoint);
+
+			curPan += (Vector2)(newLocalPoint - oldLocalPoint);
+			ClampPan ();
+			UpdateCameraPosFromPan ();
+		}
+
+		private Vector3 GetCameraAimedPos (Vector2 screenPos) {
+
+			var cam = cams[0];
+			var camFwd = cam.transform.forward;
+			screenPos.y %= Screen.height * .5f;
+
+			var pNormal = Mathf.Abs (camFwd.y) > minCamYForGroundPan ?
+				Vector3.down * Mathf.Sign (camFwd.y) :
+				new Vector3 (-camFwd.x, 0f, -camFwd.z).normalized;
+
+			var plane = new Plane (pNormal, Vector3.zero);
+
+			var ray = cam.ScreenPointToRay (screenPos);
+			if (!plane.Raycast (ray, out var dist)) {
+				Debug.Log ("raycast fail");
+				return Vector3.zero;
+			}
+
+			return ray.GetPoint (dist);
+		}
+
+		private void ClampPan () {
+
+			float fovNormalized = 1f - (fov - fovMin) / (fovMax - fovMin);
+			Vector2 maxPanNorm = maxPan * fovNormalized;
+
+			curPan = new Vector2 (
+				Mathf.Clamp (curPan.x, -maxPanNorm.x, maxPanNorm.x),
+				Mathf.Clamp (curPan.y, -maxPanNorm.y, maxPanNorm.y));
+		}
+
+		private void UpdatePanFromCameraPos (Camera cam) {
+
+			Vector3 camLocalPos = cam.transform.localPosition - camInitPos;
+			curPan = new Vector2 (camLocalPos.x, camLocalPos.y);
+			ClampPan ();
+			UpdateCameraPosFromPan ();
+		}
+
+		private void UpdateCameraPosFromPan () {
+
+			var c = cams[0];
+			c.transform.localPosition = camInitPos + (Vector3)curPan;
+
+			if (hasGround && c.transform.position.y < groundClearance) {
+				var p = c.transform.position;
+				p.y = groundClearance;
+				c.transform.position = p;
+			}
+
+			cams[1].transform.localPosition = c.transform.localPosition;
+		}
+
+		private Vector2 GetLowerScreenCenter () => new Vector2 (Screen.width * .5f, Screen.height * .25f);
+
 		void Update () {
 
 			if (DiffHit.IsLevelCompleted ()) {
 
 				PanAndZoom_onPinchChecked (levelClearUnzoomRate, 1f,
-					new Vector2 (Screen.width * .5f, Screen.height * .25f), Vector2.zero, 0f, true);
+					GetLowerScreenCenter (), Vector2.zero, 0f, true);
 
 				MarkFader.ShowMarks ();
 				return;
@@ -200,8 +298,15 @@ namespace Assets.Scripts {
 
 			if (!me) return;
 
-			if (levelType == LevelType.Floating) {
-				me.tiltRotMin = -3f * me.tiltRotMax;
+			switch (levelType) {
+				case LevelType.Grounded:
+					me.hasGround = true;
+					break;
+				case LevelType.Floating:
+					me.tiltRotMin = -3f * me.tiltRotMax;
+					break;
+				default:
+					break;
 			}
 		}
 	}
