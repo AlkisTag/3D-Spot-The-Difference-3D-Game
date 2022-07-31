@@ -142,9 +142,12 @@ namespace Assets.Scripts {
 			GameObject go = null;
 			ParticleSystem prt;
 
+			bool foundCol = false;
+
 			// emit with box shape if item has BoxCollider
 			var bc = item.GetComponentInChildren<BoxCollider> ();
 			if (bc) {
+				foundCol = true;
 				go = Instantiate (sparklesPrefabBox.gameObject, item.transform.position, item.transform.rotation);
 
 				prt = go.GetComponent<ParticleSystem> ();
@@ -152,10 +155,12 @@ namespace Assets.Scripts {
 				shape.position = bc.center;
 				shape.scale = bc.size;
 			}
-			else {
-				// emit with sphere shape if item has SphereCollider
+
+			// emit with sphere shape if item has SphereCollider
+			if (!foundCol) {
 				var sc = item.GetComponentInChildren<SphereCollider> ();
 				if (sc) {
+					foundCol = true;
 					go = Instantiate (sparklesPrefabSphere.gameObject, item.transform.position, item.transform.rotation);
 
 					prt = go.GetComponent<ParticleSystem> ();
@@ -163,6 +168,16 @@ namespace Assets.Scripts {
 					shape.position = sc.center;
 					shape.radius = sc.radius;
 				}
+			}
+
+			// otherwise emit with box shape using world bounds
+			if (!foundCol) {
+				var bounds = GetBounds (item);
+				go = Instantiate (sparklesPrefabBox.gameObject, bounds.center, Quaternion.identity);
+
+				prt = go.GetComponent<ParticleSystem> ();
+				var shape = prt.shape;
+				shape.scale = bounds.size;
 			}
 
 			if (!go) return;
@@ -190,6 +205,26 @@ namespace Assets.Scripts {
 
 			var lr = go.layer;
 			return lr == diffLayers[0] || lr == diffLayers[1];
+		}
+
+		private static Bounds GetBounds (GameObject obj) {
+
+			Bounds bounds = GetRenderBounds (obj);
+
+			foreach (Transform child in obj.transform) {
+				bounds.Encapsulate (GetBounds (child.gameObject));
+			}
+
+			return bounds;
+		}
+
+		private static Bounds GetRenderBounds (GameObject obj) {
+
+			Renderer render = obj.GetComponent<Renderer> ();
+			if (render) {
+				return render.bounds;
+			}
+			return new Bounds (obj.transform.position, Vector3.zero);
 		}
 	}
 }
