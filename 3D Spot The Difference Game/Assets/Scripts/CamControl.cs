@@ -184,10 +184,12 @@ namespace Assets.Scripts {
 			if (minZoomFactor > 0) {
 				me.fovMax *= minZoomFactor;
 				ThumbnailGen.ModifyCameraFov (minZoomFactor);
+				me.turnSens *= minZoomFactor;
 			}
 			if (maxZoomFactor > 0) {
 				me.fovMin /= maxZoomFactor;
 				me.maxPan /= maxZoomFactor;
+				me.turnSens /= maxZoomFactor;
 			}
 
 			// simulate zoom to clamp current zoom if needed
