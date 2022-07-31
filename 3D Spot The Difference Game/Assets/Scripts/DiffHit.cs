@@ -15,6 +15,7 @@ namespace Assets.Scripts {
 		private const float maxDist = 1000f;
 		public LayerMask[] layerMasks = new LayerMask[2];
 		public static readonly int[] diffLayers = new int[] { 8, 9 };
+		public float[] spherecastRadii = new float[] { .1f, .2f, .4f, .8f };
 
 		private Vector3 camerasOffset;
 
@@ -48,42 +49,47 @@ namespace Assets.Scripts {
 			if (!me) return;
 
 			var initPos = screenPos;
-			for (int i = 0; i < 2; i++) {
-				var cam = me.rayCams[i];
+			foreach (var radius in me.spherecastRadii) {
 
-				// get screen pos, adjusted into this camera's viewport
-				screenPos = initPos;
-				screenPos.y %= Screen.height * .5f;
-				screenPos.y += Screen.height * cam.rect.y;
-				var ray = cam.ScreenPointToRay (screenPos);
+				for (int i = 0; i < 2; i++) {
+					var cam = me.rayCams[i];
 
-				// if nothing hit, skip to next camera (if all checked, will lead to life loss below)
-				if (!Physics.Raycast (ray, out var hit, maxDist, me.layerMasks[i]) || hit.collider.gameObject.layer != diffLayers[i]) {
-					continue;
-				}
+					// get screen pos, adjusted into this camera's viewport
+					screenPos = initPos;
+					screenPos.y %= Screen.height * .5f;
+					screenPos.y += Screen.height * cam.rect.y;
+					var ray = cam.ScreenPointToRay (screenPos);
 
-				// if tapped an already found difference, exit (no life loss)
-				var go = hit.collider.gameObject;
-				if (me.foundDiffs.Contains (go) || DiffItem.itemCopies.Contains (go)) {
+					// if nothing hit, skip to next camera (if all checked, will lead to life loss below)
+					if (!Physics.SphereCast (ray, radius, out var hit, maxDist, me.layerMasks[i]) ||
+						hit.collider.gameObject.layer != diffLayers[i]) {
+
+						continue;
+					}
+
+					// if tapped an already found difference, exit (no life loss)
+					var go = hit.collider.gameObject;
+					if (me.foundDiffs.Contains (go) || DiffItem.itemCopies.Contains (go)) {
+						return;
+					}
+
+					// mark found difference
+					me.foundDiffs.Add (go);
+					me.foundText.text = me.foundDiffs.Count.ToString ();
+
+					// show mark on both objects
+					me.MarkFoundDiff (go);
+					MarkFader.ShowMarks ();
+					ScreenFlash.FlashGood ();
+
+					// check if all differences found
+					if (IsLevelCompleted () && me.levelCompletedMenu) {
+						me.levelCompletedMenu.SetActive (true);
+					}
+
+					// exit (don't lose life)
 					return;
 				}
-
-				// mark found difference
-				me.foundDiffs.Add (go);
-				me.foundText.text = me.foundDiffs.Count.ToString ();
-
-				// show mark on both objects
-				me.MarkFoundDiff (go);
-				MarkFader.ShowMarks ();
-				ScreenFlash.FlashGood ();
-
-				// check if all differences found
-				if (IsLevelCompleted () && me.levelCompletedMenu) {
-					me.levelCompletedMenu.SetActive (true);
-				}
-
-				// exit (don't lose life)
-				return;
 			}
 
 			// if we reached this point, tap was a miss, so lose life
@@ -144,7 +150,7 @@ namespace Assets.Scripts {
 				prt = go.GetComponent<ParticleSystem> ();
 				var shape = prt.shape;
 				shape.position = bc.center;
-				shape.scale = bc.size - Vector3.one * DiffItem.extendBox;
+				shape.scale = bc.size;
 			}
 			else {
 				// emit with sphere shape if item has SphereCollider
@@ -155,7 +161,7 @@ namespace Assets.Scripts {
 					prt = go.GetComponent<ParticleSystem> ();
 					var shape = prt.shape;
 					shape.position = sc.center;
-					shape.radius = sc.radius - DiffItem.extendSphere;
+					shape.radius = sc.radius;
 				}
 			}
 
