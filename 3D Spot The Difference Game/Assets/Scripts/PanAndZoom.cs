@@ -76,12 +76,19 @@ public class PanAndZoom : MonoBehaviour {
 		}
 
 		if (Input.GetMouseButton (0) && isTouching) {
+
+			bool shift = Input.GetKey (KeyCode.LeftShift);
 			Vector2 move = (Vector2)Input.mousePosition - touch0LastPosition;
 			touch0LastPosition = Input.mousePosition;
-			momentum = Vector2.SmoothDamp (momentum, move, ref momentumLerpSpeed, momentumLerpTime);
+			if (shift) {
+				momentum = Vector2.zero;
+			}
+			else {
+				momentum = Vector2.SmoothDamp (momentum, move, ref momentumLerpSpeed, momentumLerpTime);
+			}
 
 			if (move != Vector2.zero) {
-				if (Input.GetKey (KeyCode.LeftShift)) OnPinch (Input.mousePosition, 1f, 1f, move, 0f);
+				if (shift) OnPinch (Input.mousePosition, 1f, 1f, move, 0f);
 				else OnSwipe (move);
 			}
 		}
@@ -176,7 +183,7 @@ public class PanAndZoom : MonoBehaviour {
 			Vector2 centerPrev = (prev0 + prev1) * .5f;
 			OnPinch (center, previousDistance, currentDistance, center - centerPrev, rot);
 
-			momentum = Vector2.SmoothDamp (momentum, center - centerPrev, ref momentumLerpSpeed, momentumLerpTime);
+			momentum = Vector2.zero;
 		}
 		else {
 			if (isTouching) {
