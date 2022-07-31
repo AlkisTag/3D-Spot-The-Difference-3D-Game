@@ -247,7 +247,7 @@ namespace Assets.Scripts {
 			cams[1].transform.localPosition = c.transform.localPosition;
 		}
 
-		private Vector2 GetLowerScreenCenter () => new Vector2 (Screen.width * .5f, Screen.height * .25f);
+		private static Vector2 GetLowerScreenCenter () => new Vector2 (Screen.width * .5f, Screen.height * .25f);
 
 		void Update () {
 
@@ -291,7 +291,9 @@ namespace Assets.Scripts {
 			}
 
 			// simulate zoom to clamp current zoom if needed
-			me.PanAndZoom_onPinchChecked (1f, 1f, Vector2.zero, Vector2.zero, 0f);
+			var screenPos = GetLowerScreenCenter ();
+			me.PanAndZoom_onPinchChecked (1f, 1f, screenPos, Vector2.zero, 0f);
+			me.PanAndZoom_onEndTouch (screenPos, Vector2.zero);
 		}
 
 		public static void AdjustControlsToLevel (LevelType levelType) {
