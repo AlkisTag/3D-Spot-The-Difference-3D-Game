@@ -1020,12 +1020,14 @@ MonoBehaviour:
   - {fileID: 637814352}
   tiltRotMin: -40
   tiltRotMax: 40
+  hasGround: 0
+  groundClearance: 0.5
   fovMin: 10
   fovMax: 45
   turnSens: {x: 0.25, y: -0.25}
   turnMomentumDecay: 0.4
   maxPan: {x: 10, y: 10}
-  panSens: 0.025
+  panZoomSens: 0.1
   levelClearUnzoomRate: 1.005
 --- !u!114 &359680484
 MonoBehaviour:
@@ -1077,6 +1079,13 @@ MonoBehaviour:
     m_Bits: 320
   - serializedVersion: 2
     m_Bits: 640
+  spherecastRadii:
+  - 0.02
+  - 0.1
+  - 0.2
+  - 0.4
+  - 0.6
+  - 0.8
   foundText: {fileID: 166430461}
   totalText: {fileID: 238504436}
   levelCompletedMenu: {fileID: 2127076794}
